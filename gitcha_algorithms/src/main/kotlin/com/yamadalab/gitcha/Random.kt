@@ -1,20 +1,27 @@
 package com.yamadalab.gitcha
 
 import java.io.File
+import java.io.FileNotFoundException
 
 class Random {
 
     companion object {
         init {
-            val libraryPath = System.getProperty("java.library.path");
-            println("java.library.path: $libraryPath");
+            val cppLibPath: String = "src/main/cpp/build/lib";
+            val cppLibName: String = System.mapLibraryName("gitcha_algorithms");
+            val cppLibFullPath: String = "$cppLibPath/$cppLibName";
 
-            val lib: File = File("src/main/cpp/build/lib/" + System.mapLibraryName("gitcha_algorithms"));
-            println("Library Path : ${lib.absolutePath}");
-            System.load(lib.absolutePath);
+            try {
+                val cppLibFile: File = File(cppLibFullPath);
+                println("CPP Library Path : ${cppLibFile.absolutePath}");
+                System.load(cppLibFile.absolutePath);
+            } catch (usle: UnsatisfiedLinkError) {
+                println("$usle");
+            } catch (fne: FileNotFoundException) {
+                println("$fne");
+            }
         }
     }
 
-    external fun wrsRandom(weights: LongArray): Int;
-    external fun pityRandom(baseChance: Int, maxFails: Int, currentFails: Int): Boolean;
+    external fun draw(items: Array<Pair<String, Pair<Double, Int>>>): String;
 }

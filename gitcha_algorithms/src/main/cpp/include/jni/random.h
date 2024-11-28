@@ -1,5 +1,12 @@
 #include <jni.h>
+#include <vector>
+#include <string>
+#include <iostream>
+#include <utility>
+
 #include "algorithm/algorithm.hpp"
+
+#define TAG "[Random]"
 
 #ifndef _Included_com_yamadalab_gitcha_Random
 #define _Included_com_yamadalab_gitcha_Random
@@ -7,13 +14,7 @@
 extern "C" {
 #endif
 
-JNIEXPORT jint JNICALL Java_com_yamadalab_gitcha_Random_wrsRandom(
-    JNIEnv *jenv, jobject jobj,
-    jlongArray jweights);
-
-JNIEXPORT jboolean JNICALL Java_com_yamadalab_gitcha_Random_pityRandom(
-    JNIEnv *jenv, jobject jobj,
-    jint jbase_chance, jint jmax_fails, jint jcurrent_fails);
+JNIEXPORT jstring JNICALL Java_com_yamadalab_gitcha_Random_draw(JNIEnv *jenv, jobject jobj, jobjectArray jitems);
 
 
 #ifdef __cplusplus

@@ -1,19 +1,34 @@
 #include "algorithm/algorithm.hpp"
-void pity_test()
-{
-    int base_chance = 5;
-    int max_fails = 10;
-    int current_fails = 0;
+#include "utils/logger.hpp"
+#include <memory>
+#include <vector>
+#include <utility>
+#include <iostream> 
 
-    for (int attempt = 1; attempt <= 20; ++attempt)
-    {
-    }
-}
+com::yamadalab::gitcha::Logger::SharedPtr logger = std::make_shared<com::yamadalab::gitcha::Logger>();
+com::yamadalab::gitcha::Algorithm::SharedPtr algo = std::make_shared<com::yamadalab::gitcha::Algorithm>();
 
 void wrs_test()
 {
-    std::vector<std::string> items = {"A", "B", "C", "D"};
-    std::vector<int> weights = {10, 20, 30, 40};
+    std::vector<std::pair<std::string, std::pair<double, int>>> items =
+    {
+        {"Item1", {5.1, 3}},
+        {"Item2", {0.2, 5}},
+        {"Item3", {0.3, 7}},
+        {"Item4", {0.4, 9}},
+        {"Item5", {0.5, 1}},
+        {"Item6", {0.6, 2}},
+        {"Item7", {0.7, 3}},
+        {"Item8", {0.8, 4}},
+        {"Item9", {0.9, 5}},
+        {"Item10", {1.0, 6}},
+        {"Item11", {1.1, 1}},
+        {"Item12", {1.2, 2}},
+
+    };
+
+    const std::string &result = algo->draw(items);
+    logger->info("Item : %s", result.c_str());
 }
 
 int main(int argc, const char *const *argv)

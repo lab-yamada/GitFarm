@@ -1,35 +1,44 @@
 #include "jni/random.h"
 
-JNIEXPORT jint JNICALL Java_com_yamadalab_gitcha_Random_wrsRandom(
-    JNIEnv *jenv, jobject jobj,
-    jlongArray jweights)
+JNIEXPORT jstring JNICALL Java_com_yamadalab_gitcha_Random_draw(JNIEnv *jenv, jobject jobj, jobjectArray jitems)
 {
-    jsize jweights_len = jenv->GetArrayLength(jweights);
-    jlong* jweight_elements = jenv->GetLongArrayElements(jweights, nullptr);
+    com::yamadalab::gitcha::Algorithm::SharedPtr algorithm = std::shared_ptr<com::yamadalab::gitcha::Algorithm>();
 
-    std::vector<int> cweights;
-    cweights.reserve(jweights_len);
+    std::vector<std::pair<std::string, std::pair<double, int>>> citems_vector;
 
-    for (jsize i = 0; i < jweights_len; i++)
+    const jsize &jitem_size = jenv->GetArrayLength(jitems);
+    printf("%s, Received jitem_size: %d\n", TAG, jitem_size);
+
+    for (jsize i = 0; i < jitem_size; i++)
     {
-        cweights.push_back(static_cast<int>(jweight_elements[i]));
+        const jobject &jitem = jenv->GetObjectArrayElement(jitems, i);
+        const jclass &jitem_class = jenv->GetObjectClass(jitem);
+
+        const jfieldID &jitem_pair_first_id = jenv->GetFieldID(jitem_class, "first", "Ljava/lang/Object;");
+        jstring jitem_pair_first_val = (jstring) jenv->GetObjectField(jitem, jitem_pair_first_id);
+
+        const char *citem_id = jenv->GetStringUTFChars(jitem_pair_first_val, nullptr);
+        printf("%s, citem_id : %s\n", TAG, citem_id);
+
+        const jfieldID &jpair_second_id = jenv->GetFieldID(jitem_class, "second", "Ljava/lang/Object;");
+        const jobject &jpair_second_val = jenv->GetObjectField(jitem, jpair_second_id);
+
+        const jclass &jitem_info_pair_class = jenv->GetObjectClass(jpair_second_val);
+        const jfieldID &jitem_info_pair_first_id = jenv->GetFieldID(jitem_info_pair_class, "first", "D");
+        const jdouble &jprobability = jenv->GetDoubleField(jpair_second_val, jitem_info_pair_first_id);
+        const double &cprobability = static_cast<double>(jprobability);
+
+        const jfieldID &jitem_info_pair_second_id = jenv->GetFieldID(jitem_info_pair_class, "second", "I");
+        const jint &jfail_count = jenv->GetIntField(jpair_second_val, jitem_info_pair_second_id);
+        const int &cfail_count = static_cast<int>(jfail_count);
+
+        citems_vector.push_back({std::string(citem_id), {cprobability, cfail_count}});
+
+        jenv->ReleaseStringUTFChars(jitem_pair_first_val, citem_id);
     }
-    jenv->ReleaseLongArrayElements(jweights, jweight_elements, JNI_ABORT);
 
-    int cresult = com::yamadalab::gitcha::wrs_random(cweights);
+    std::string draw_result_id = algorithm->draw(citems_vector);
+    jenv->NewStringUTF(draw_result_id.c_str());
 
-    return static_cast<jint>(cresult);
-}
-
-JNIEXPORT jboolean JNICALL Java_com_yamadalab_gitcha_Random_pityRandom(
-    JNIEnv *jenv, jobject jobj,
-    jint jbase_chance, jint jmax_fails, jint jcurrent_fails)
-{
-    const int &cbase_chance = static_cast<int>(jbase_chance);
-    const int &cmax_fails = static_cast<int>(jmax_fails);
-    const int &ccurrent_fails = static_cast<int>(jcurrent_fails);
-
-    const bool &cresult = com::yamadalab::gitcha::pity_random(cbase_chance, cmax_fails, ccurrent_fails);
-
-    return static_cast<jboolean>(cresult);
+    return jenv->NewStringUTF(draw_result_id.c_str());
 }
