@@ -1,11 +1,9 @@
 #include "algorithm/algorithm.hpp"
-#include "utils/logger.hpp"
 #include <memory>
 #include <vector>
 #include <utility>
 #include <iostream> 
 
-com::yamadalab::gitcha::Logger::SharedPtr logger = std::make_shared<com::yamadalab::gitcha::Logger>();
 com::yamadalab::gitcha::Algorithm::SharedPtr algo = std::make_shared<com::yamadalab::gitcha::Algorithm>();
 
 void wrs_test()
@@ -28,12 +26,11 @@ void wrs_test()
     };
 
     const std::string &result = algo->draw(items);
-    logger->info("Item : %s", result.c_str());
+    printf("Item : %s\n", result.c_str());
 }
 
 int main(int argc, const char *const *argv)
 {
-    
     wrs_test();
     return 0;
 }
