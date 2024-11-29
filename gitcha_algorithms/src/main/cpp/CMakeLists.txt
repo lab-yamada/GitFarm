@@ -49,8 +49,8 @@ include_directories(
 set(SOURCES
     src/algorithm/algorithm.cpp
     src/jni/random.cpp
-    src/utils/logger.cpp
     src/domain/item.cpp
+    src/jni/jni.c
 )
 
 set(LIB_NAME

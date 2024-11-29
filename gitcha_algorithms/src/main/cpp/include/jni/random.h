@@ -4,17 +4,18 @@
 #include <iostream>
 #include <utility>
 
+#include "jni/jni.h"
 #include "algorithm/algorithm.hpp"
 
 #define TAG "[Random]"
 
-#ifndef _Included_com_yamadalab_gitcha_Random
-#define _Included_com_yamadalab_gitcha_Random
+#ifndef _Included_com_yamadalab_gitcha_application_Random
+#define _Included_com_yamadalab_gitcha_application_Random
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-JNIEXPORT jstring JNICALL Java_com_yamadalab_gitcha_Random_draw(JNIEnv *jenv, jobject jobj, jobjectArray jitems);
+JNIEXPORT jstring JNICALL Java_com_yamadalab_gitcha_application_Random_cdraw(JNIEnv *jenv, jobject jobj, jobjectArray jitems);
 
 
 #ifdef __cplusplus

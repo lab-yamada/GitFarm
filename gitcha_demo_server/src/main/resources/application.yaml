@@ -1,0 +1,15 @@
+logging:
+  level:
+    root: warn
+    com.yamadalab.gitcha: debug
+
+spring:
+  application:
+    name: gitcha_dummy_server
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+    hiddenmethod:
+      filter:
+        enabled: true

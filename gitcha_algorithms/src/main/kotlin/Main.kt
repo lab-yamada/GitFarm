@@ -1,21 +1,29 @@
 package com.yamadalab.gitcha
 
+import com.yamadalab.gitcha.application.Random
+import com.yamadalab.gitcha.domain.Item
+
 fun callDrawFunction() {
     val random: Random = Random();
 
-    val items: Array<Pair<String, Pair<Double, Int>>> = arrayOf(
-        Pair("Item1", Pair(5.1, 0)),
-        Pair("Item2", Pair(4.1, 1)),
-        Pair("Item3", Pair(3.1, 2)),
-        Pair("Item4", Pair(2.1, 3)),
-        Pair("Item5", Pair(1.1, 4)),
-        Pair("Item6", Pair(0.1, 5)),
-        Pair("Item7", Pair(9.1, 6)),
-        Pair("Item8", Pair(8.1, 7)),
-        Pair("Item9", Pair(7.1, 8)),
-        Pair("Item10", Pair(6.1, 9)),
-        Pair("Item11", Pair(5.1, 10)),
-        Pair("Item12", Pair(4.1, 11)),
+    val items: Array<Item> = arrayOf(
+        Item("Item1", 0.1, 0),
+        Item("Item2", 1.1, 1),
+        Item("Item3", 2.1, 2),
+        Item("Item4", 3.1, 3),
+        Item("Item5", 4.1, 4),
+        Item("Item6", 5.1, 5),
+        Item("Item7", 6.1, 6),
+        Item("Item8", 7.1, 7),
+        Item("Item9", 8.1, 8),
+        Item("Item10", 9.1, 9),
+        Item("Item11", 10.1, 10),
+        Item("Item12", 11.1, 11),
+        Item("Item13", 12.1, 12),
+        Item("Item14", 13.1, 13),
+        Item("Item15", 14.1, 14),
+        Item("Item16", 15.1, 15),
+        Item("Item17", 16.1, 16)
     );
 
     val drawResultId: String = random.draw(items);
@@ -27,7 +35,7 @@ fun callDrawFunction() {
     } else if (drawResultId == "5000") {
         println("API Error");
     } else {
-        println("DrawResultID : $drawResultId");
+        println("DrawResultID : [$drawResultId]");
     }
 }
 

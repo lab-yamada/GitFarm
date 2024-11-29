@@ -11,7 +11,6 @@
 #include <ctime>
 #include <cmath>
 
-#include "utils/logger.hpp"
 #include "domain/item.hpp"
 
 constexpr int PITY_WEIGHT = 1;
@@ -25,8 +24,6 @@ namespace com
             class Algorithm
             {
             private:
-                com::yamadalab::gitcha::Logger::SharedPtr logger_;
-
                 com::yamadalab::gitcha::Item wrs_draw(const std::vector<com::yamadalab::gitcha::Item>& items);
                 bool pity_draw(int probability, int fail_count);
 
