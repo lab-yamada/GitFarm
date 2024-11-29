@@ -1,17 +1,8 @@
-package com.yamadalab.gitcha.application
+package com.yamadalab.gitcha.application;
 
-import com.yamadalab.gitcha.domain.Item
-import java.io.File
-import java.io.FileNotFoundException
-
-fun String.expandUser(): String {
-    return if (this.startsWith("~")) {
-        val userHome = System.getProperty("user.home")
-        this.replaceFirst("~", userHome)
-    } else {
-        this
-    }
-}
+import com.yamadalab.gitcha.domain.Item;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 class Random {
 

@@ -17,7 +17,6 @@ extern "C" {
 
 JNIEXPORT jstring JNICALL Java_com_yamadalab_gitcha_application_Random_cdraw(JNIEnv *jenv, jobject jobj, jobjectArray jitems);
 
-
 #ifdef __cplusplus
 }
 #endif

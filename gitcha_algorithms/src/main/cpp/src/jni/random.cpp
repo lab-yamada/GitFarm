@@ -2,7 +2,7 @@
 
 JNIEXPORT jstring JNICALL Java_com_yamadalab_gitcha_application_Random_cdraw(JNIEnv *jenv, jobject jobj, jobjectArray jitems)
 {
-    std::string draw_result_id = "";
+    std::string cdraw_result_id = "";
     com::yamadalab::gitcha::Algorithm::SharedPtr algorithm = std::shared_ptr<com::yamadalab::gitcha::Algorithm>();
 
     std::vector<std::pair<std::string, std::pair<double, int>>> citems_vector;
@@ -10,7 +10,7 @@ JNIEXPORT jstring JNICALL Java_com_yamadalab_gitcha_application_Random_cdraw(JNI
     const jsize &jitem_size = jenv->GetArrayLength(jitems);
     printf("%s, Received jitem_size: %d\n", TAG, jitem_size);
 
-    for (jsize i = 0; i < jitem_size; i++)
+    for (jsize i=0;i<jitem_size;i++)
     {
         const jobject &jitem = jenv->GetObjectArrayElement(jitems, i);
         const jclass &jitem_class = jenv->GetObjectClass(jitem);
@@ -44,9 +44,8 @@ JNIEXPORT jstring JNICALL Java_com_yamadalab_gitcha_application_Random_cdraw(JNI
         printf("%s, citem\n\tid : %s\n\tprobability : %f\n\tfail_count : %d\n", TAG, citem.first.c_str(), citem.second.first, citem.second.second);
     }
 
-    draw_result_id = algorithm->draw(citems_vector);
-    printf("%s, draw_result_id : %s", TAG, draw_result_id.c_str());
-    jenv->NewStringUTF(draw_result_id.c_str());
+    cdraw_result_id = algorithm->draw(citems_vector);
+    printf("%s, cdraw_result_id : %s", TAG, cdraw_result_id.c_str());
 
-    return jenv->NewStringUTF(draw_result_id.c_str());
+    return jenv->NewStringUTF(cdraw_result_id.c_str());
 }
