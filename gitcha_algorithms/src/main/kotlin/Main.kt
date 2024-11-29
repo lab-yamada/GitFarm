@@ -23,7 +23,7 @@ fun callDrawFunction() {
         Item("Item14", 13.1, 13),
         Item("Item15", 14.1, 14),
         Item("Item16", 15.1, 15),
-        Item("Item17", 16.1, 16),
+        Item("Item17", 16.1, 16)
     );
 
     val drawResultId: String = random.draw(items);
@@ -35,7 +35,7 @@ fun callDrawFunction() {
     } else if (drawResultId == "5000") {
         println("API Error");
     } else {
-        println("DrawResultID : $drawResultId");
+        println("DrawResultID : [$drawResultId]");
     }
 }
 

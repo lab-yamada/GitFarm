@@ -4,11 +4,21 @@ import com.yamadalab.gitcha.domain.Item
 import java.io.File
 import java.io.FileNotFoundException
 
+fun String.expandUser(): String {
+    return if (this.startsWith("~")) {
+        val userHome = System.getProperty("user.home")
+        this.replaceFirst("~", userHome)
+    } else {
+        this
+    }
+}
+
 class Random {
 
     companion object {
         init {
-            val cppLibPath: String = "src/main/cpp/build/lib";
+            val userHome: String = System.getProperty("user.home");
+            val cppLibPath: String = "$userHome/gitcha_ws/gitcha_algorithms/src/main/cpp/build/lib";
             val cppLibName: String = System.mapLibraryName("gitcha_algorithms");
             val cppLibFullPath: String = "$cppLibPath/$cppLibName";
 
