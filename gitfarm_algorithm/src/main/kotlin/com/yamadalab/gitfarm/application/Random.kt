@@ -1,6 +1,6 @@
-package com.yamadalab.gitcha.application;
+package com.yamadalab.gitfarm.application;
 
-import com.yamadalab.gitcha.domain.Item;
+import com.yamadalab.gitfarm.domain.Item;
 import java.io.File;
 import java.io.FileNotFoundException;
 
