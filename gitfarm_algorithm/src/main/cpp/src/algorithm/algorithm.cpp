@@ -2,15 +2,6 @@
 
 com::yamadalab::gitcha::Algorithm::Algorithm()
 {
-    // this->logger_ = std::make_shared<com::yamadalab::gitcha::Logger>();
-    // if (this->logger_ == nullptr)
-    // {
-    //     printf("Logger is not initialized\n");
-    // }
-    // else
-    // {
-    //     printf("Logger successfully initialized\n");
-    // }
 }
 
 com::yamadalab::gitcha::Algorithm::~Algorithm()

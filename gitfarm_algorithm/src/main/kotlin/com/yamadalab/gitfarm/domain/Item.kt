@@ -1,4 +1,4 @@
-package com.yamadalab.gitcha.domain
+package com.yamadalab.gitfarm.domain
 
 class Item {
 

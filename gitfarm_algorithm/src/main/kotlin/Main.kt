@@ -1,7 +1,7 @@
-package com.yamadalab.gitcha
+package com.yamadalab.gitfarm
 
-import com.yamadalab.gitcha.application.Random
-import com.yamadalab.gitcha.domain.Item
+import com.yamadalab.gitfarm.application.Random
+import com.yamadalab.gitfarm.domain.Item
 
 fun callDrawFunction() {
     val random: Random = Random();

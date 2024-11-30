@@ -1,17 +1,8 @@
-package com.yamadalab.gitcha.application
+package com.yamadalab.gitfarm.application;
 
-import com.yamadalab.gitcha.domain.Item
-import java.io.File
-import java.io.FileNotFoundException
-
-fun String.expandUser(): String {
-    return if (this.startsWith("~")) {
-        val userHome = System.getProperty("user.home")
-        this.replaceFirst("~", userHome)
-    } else {
-        this
-    }
-}
+import com.yamadalab.gitfarm.domain.Item;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 class Random {
 
@@ -34,6 +25,7 @@ class Random {
         }
     }
 
+    private external fun wrsDraw(): Item;
     private external fun cdraw(items: Array<Pair<String, Pair<Double, Int>>>): String;
 
     public fun draw(items: Array<Item>): String {
