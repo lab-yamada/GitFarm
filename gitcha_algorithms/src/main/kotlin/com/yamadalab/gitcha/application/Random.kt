@@ -25,6 +25,7 @@ class Random {
         }
     }
 
+    private external fun wrsDraw(): Item;
     private external fun cdraw(items: Array<Pair<String, Pair<Double, Int>>>): String;
 
     public fun draw(items: Array<Item>): String {
