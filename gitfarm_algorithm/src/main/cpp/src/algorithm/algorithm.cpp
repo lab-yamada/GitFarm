@@ -1,21 +1,21 @@
 #include "algorithm/algorithm.hpp"
 
-com::yamadalab::gitcha::Algorithm::Algorithm()
+com::yamadalab::gitfarm::Algorithm::Algorithm()
 {
 }
 
-com::yamadalab::gitcha::Algorithm::~Algorithm()
+com::yamadalab::gitfarm::Algorithm::~Algorithm()
 {
 
 }
 
-com::yamadalab::gitcha::Item com::yamadalab::gitcha::Algorithm::wrs_draw(const std::vector<com::yamadalab::gitcha::Item>& items)
+com::yamadalab::gitfarm::Item com::yamadalab::gitfarm::Algorithm::wrs_draw(const std::vector<com::yamadalab::gitfarm::Item>& items)
 {
-    com::yamadalab::gitcha::Item result_item;
+    com::yamadalab::gitfarm::Item result_item;
 
     int total_weight = 0;
 
-    for (const com::yamadalab::gitcha::Item& item : items)
+    for (const com::yamadalab::gitfarm::Item& item : items)
     {
         total_weight += item.get__weight();
     }
@@ -30,7 +30,7 @@ com::yamadalab::gitcha::Item com::yamadalab::gitcha::Algorithm::wrs_draw(const s
     printf("WRS, random_val : %d\n", random_val);
 
     int current_weight = 0;
-    for (const com::yamadalab::gitcha::Item& item : items)
+    for (const com::yamadalab::gitfarm::Item& item : items)
     {
         current_weight += item.get__weight();
 
@@ -47,7 +47,7 @@ com::yamadalab::gitcha::Item com::yamadalab::gitcha::Algorithm::wrs_draw(const s
     throw std::runtime_error("wrs_random: No item selected, check weights and input data");
 }
 
-bool com::yamadalab::gitcha::Algorithm::pity_draw(int probability, int fail_count)
+bool com::yamadalab::gitfarm::Algorithm::pity_draw(int probability, int fail_count)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -61,7 +61,7 @@ bool com::yamadalab::gitcha::Algorithm::pity_draw(int probability, int fail_coun
     return roll <= current_chance;
 }
 
-std::string com::yamadalab::gitcha::Algorithm::draw(const std::vector<std::pair<std::string, std::pair<double, int>>> &raw_items)
+std::string com::yamadalab::gitfarm::Algorithm::draw(const std::vector<std::pair<std::string, std::pair<double, int>>> &raw_items)
 {
     std::string draw_result_id = "";
     if (raw_items.empty())
@@ -70,8 +70,8 @@ std::string com::yamadalab::gitcha::Algorithm::draw(const std::vector<std::pair<
         return draw_result_id;
     }
 
-    com::yamadalab::gitcha::Item::SharedPtr item = std::make_shared<com::yamadalab::gitcha::Item>();
-    std::vector<com::yamadalab::gitcha::Item> filtered_items;
+    com::yamadalab::gitfarm::Item::SharedPtr item = std::make_shared<com::yamadalab::gitfarm::Item>();
+    std::vector<com::yamadalab::gitfarm::Item> filtered_items;
 
     try
     {
@@ -103,7 +103,7 @@ std::string com::yamadalab::gitcha::Algorithm::draw(const std::vector<std::pair<
             printf("Draw, Item: id = %s, probability = %f, weight = %d, fail_count = %d\n", id.c_str(), probability, weight, fail_count);
         }
 
-        const com::yamadalab::gitcha::Item &drawed_item = this->wrs_draw(filtered_items);
+        const com::yamadalab::gitfarm::Item &drawed_item = this->wrs_draw(filtered_items);
         draw_result_id = drawed_item.get__id();
     }
     catch (const std::runtime_error &re)

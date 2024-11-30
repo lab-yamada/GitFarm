@@ -19,12 +19,12 @@ namespace com
 {
     namespace yamadalab
     {
-        namespace gitcha
+        namespace gitfarm
         {
             class Algorithm
             {
             private:
-                com::yamadalab::gitcha::Item wrs_draw(const std::vector<com::yamadalab::gitcha::Item>& items);
+                com::yamadalab::gitfarm::Item wrs_draw(const std::vector<com::yamadalab::gitfarm::Item>& items);
                 bool pity_draw(int probability, int fail_count);
 
             public:

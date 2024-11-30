@@ -1,9 +1,9 @@
 #include "jni/random.h"
 
-JNIEXPORT jstring JNICALL Java_com_yamadalab_gitcha_application_Random_cdraw(JNIEnv *jenv, jobject jobj, jobjectArray jitems)
+JNIEXPORT jstring JNICALL Java_com_yamadalab_gitfarm_application_Random_cdraw(JNIEnv *jenv, jobject jobj, jobjectArray jitems)
 {
     std::string cdraw_result_id = "";
-    com::yamadalab::gitcha::Algorithm::SharedPtr algorithm = std::shared_ptr<com::yamadalab::gitcha::Algorithm>();
+    com::yamadalab::gitfarm::Algorithm::SharedPtr algorithm = std::shared_ptr<com::yamadalab::gitfarm::Algorithm>();
 
     std::vector<std::pair<std::string, std::pair<double, int>>> citems_vector;
 
