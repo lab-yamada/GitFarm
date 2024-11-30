@@ -54,7 +54,7 @@ set(SOURCES
 )
 
 set(LIB_NAME
-    gitcha_algorithms
+    gitfarm_algorithm
 )
 
 add_library(${LIB_NAME} SHARED
@@ -86,7 +86,7 @@ add_executable(test_runner
     test/test.cpp
 )
 
-target_link_libraries(test_runner PRIVATE gitcha_algorithms)
+target_link_libraries(test_runner PRIVATE ${LIB_NAME})
 
 set_target_properties(test_runner PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
