@@ -25,16 +25,16 @@ class Random {
         }
     }
 
-    private external fun wrsDraw(): Item;
-    private external fun cdraw(items: Array<Pair<String, Pair<Double, Int>>>): String;
+    private external fun cSetItems(items: Array<Pair<String, Pair<Double, Int>>>): Unit;
+    private external fun cDraw(): Item;
 
     public fun draw(items: Array<Item>): String {
         val itemList: MutableList<Pair<String, Pair<Double, Int>>> = mutableListOf();
 
         for (item in items) {
-            val itemId: String = item.getId();
-            val itemProbability: Double = item.getProbability();
-            val itemFailCount: Int = item.getFailCount();
+            val itemId: String = item.id;
+            val itemProbability: Double = item.probability;
+            val itemFailCount: Int = item.failCount;
 
             val itemInfoPair: Pair<Double, Int> = Pair<Double, Int>(itemProbability, itemFailCount);
             val itemPair: Pair<String, Pair<Double, Int>> = Pair<String, Pair<Double, Int>>(itemId, itemInfoPair);
@@ -43,9 +43,9 @@ class Random {
         }
 
         val citems: Array<Pair<String, Pair<Double, Int>>> = itemList.toTypedArray();
-        println("Draw, citems : ${citems.size}");
+        this.cSetItems(citems);
 
-        val drawItemId: String = cdraw(items = citems);
-        return drawItemId;
+        val drawItem: Item = this.cDraw();
+        return drawItem.id;
     }
 }

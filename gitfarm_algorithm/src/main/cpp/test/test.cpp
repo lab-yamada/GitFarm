@@ -24,9 +24,6 @@ void wrs_test()
         {"Item12", {1.2, 2}},
 
     };
-
-    const std::string &result = algo->draw(items);
-    printf("Item : %s\n", result.c_str());
 }
 
 int main(int argc, const char *const *argv)

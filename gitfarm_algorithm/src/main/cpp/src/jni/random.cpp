@@ -1,17 +1,17 @@
 #include "jni/random.h"
 
-JNIEXPORT jstring JNICALL Java_com_yamadalab_gitfarm_application_Random_cdraw(JNIEnv *jenv, jobject jobj, jobjectArray jitems)
-{
-    std::string cdraw_result_id = "";
-    com::yamadalab::gitfarm::Algorithm::SharedPtr algorithm = std::shared_ptr<com::yamadalab::gitfarm::Algorithm>();
+com::yamadalab::gitfarm::Algorithm::SharedPtr algorithm_ = std::make_shared<com::yamadalab::gitfarm::Algorithm>();
 
-    std::vector<std::pair<std::string, std::pair<double, int>>> citems_vector;
+JNIEXPORT void JNICALL Java_com_yamadalab_gitfarm_application_Random_cSetItems(JNIEnv *jenv, jobject jobj, jobjectArray jitems)
+{
+    std::vector<com::yamadalab::gitfarm::Item> citems;
 
     const jsize &jitem_size = jenv->GetArrayLength(jitems);
-    printf("%s, Received jitem_size: %d\n", TAG, jitem_size);
 
     for (jsize i=0;i<jitem_size;i++)
     {
+        com::yamadalab::gitfarm::Item::SharedPtr citem = std::make_shared<com::yamadalab::gitfarm::Item>();
+
         const jobject &jitem = jenv->GetObjectArrayElement(jitems, i);
         const jclass &jitem_class = jenv->GetObjectClass(jitem);
 
@@ -34,18 +34,84 @@ JNIEXPORT jstring JNICALL Java_com_yamadalab_gitfarm_application_Random_cdraw(JN
         const jint &jfail_count = JNI_parse_to_jint(jenv, jfail_count_object);
         const int &cfail_count = static_cast<int>(jfail_count);
 
-        citems_vector.push_back({std::string(citem_id), {cprobability, cfail_count}});
+        citem->set__id(std::string(citem_id));
+        citem->set__probability(cprobability);
+        citem->set__fail_count(cfail_count);
+
+        citems.push_back(*citem);
 
         jenv->ReleaseStringUTFChars(jitem_id, citem_id);
     }
 
-    for (const auto &citem : citems_vector)
+    // for (const com::yamadalab::gitfarm::Item &citem : citems)
+    // {
+    //     printf("%s, citem\n\tid : %s\n\tprobability : %f\n\tfail_count : %d\n", TAG, citem.get__id().c_str(), citem.get__probability(), citem.get__fail_count());
+    // }
+
+    algorithm_->set__items(citems);
+}
+
+JNIEXPORT jobject JNICALL Java_com_yamadalab_gitfarm_application_Random_cDraw(JNIEnv *jenv, jobject jobj)
+{
+    const std::vector<com::yamadalab::gitfarm::Item> &citems = algorithm_->get__items();
+    if (citems.empty())
     {
-        printf("%s, citem\n\tid : %s\n\tprobability : %f\n\tfail_count : %d\n", TAG, citem.first.c_str(), citem.second.first, citem.second.second);
+        printf("%s, WrsDraw, citems is empty");
+        return nullptr;
+    }
+    
+    std::vector<com::yamadalab::gitfarm::Item> cweighted_items;
+    for (const com::yamadalab::gitfarm::Item &citem : citems)
+    {
+        com::yamadalab::gitfarm::Item::SharedPtr cweighted_item = std::make_shared<com::yamadalab::gitfarm::Item>();
+
+        int cweight = 0;
+        const double &cprobability = citem.get__probability();
+        const double &cfail_count = citem.get__fail_count();
+
+        const bool &is_pity = algorithm_->pity_draw(cprobability, cfail_count);
+
+        if (is_pity == true)
+        {
+            cweight = PITY_WEIGHT;
+        }
+        else
+        {
+            cweight = 0;
+        }
+
+        cweighted_item->set__id(citem.get__id());
+        cweighted_item->set__weight(cweight);
+        cweighted_item->set__probability(cprobability);
+        cweighted_item->set__fail_count(cfail_count);
+        cweighted_items.push_back(*cweighted_item);
     }
 
-    cdraw_result_id = algorithm->draw(citems_vector);
-    printf("%s, cdraw_result_id : %s", TAG, cdraw_result_id.c_str());
+    const com::yamadalab::gitfarm::Item &cdraw_item = algorithm_->wrs_draw(cweighted_items);
 
-    return jenv->NewStringUTF(cdraw_result_id.c_str());
+    const jclass &jitem_class = jenv->FindClass("com/yamadalab/gitfarm/domain/Item");
+
+    if (jitem_class == nullptr)
+    {
+        printf("%s jItemClass is null", TAG);
+        return nullptr;
+    }
+
+    jmethodID jitem_constructor = jenv->GetMethodID(jitem_class, "<init>", "(Ljava/lang/String;IDI)V");
+    if (jitem_constructor == nullptr)
+    {
+        printf("%s jItemConstructor is null", TAG);
+        return nullptr;
+    }
+
+    jstring jid = jenv->NewStringUTF(cdraw_item.get__id().c_str());
+    jint jweight = cdraw_item.get__weight();
+    jdouble jprobability = cdraw_item.get__probability();
+    jint jfail_count = cdraw_item.get__fail_count();
+
+    jobject jitem = jenv->NewObject(jitem_class, jitem_constructor, jid, jweight, jprobability, jfail_count);
+
+    jenv->DeleteLocalRef(jid);
+
+    return jitem;
 }
