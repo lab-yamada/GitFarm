@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
+    implementation(kotlin("stdlib")
 }
 
 tasks.test {
@@ -23,5 +23,5 @@ kotlin {
 }
 
 application {
-    mainClass.set("com.yamadalab.gitfarm.Main")
+    mainClass.set("com.yamadalab.gitfarm.Mainkt")
 }
