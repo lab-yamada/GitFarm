@@ -1,6 +1,5 @@
 plugins {
     kotlin("jvm") version "2.0.21"
-    application
 }
 
 group = "com.yamadalab.gitfarm"
@@ -14,14 +13,16 @@ dependencies {
     implementation(kotlin("stdlib"))
 }
 
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "MainKt"
+    }
+}
+
 tasks.test {
     useJUnitPlatform()
 }
 
 kotlin {
     jvmToolchain(17)
-}
-
-application {
-    mainClass.set("com.yamadalab.gitfarm.Mainkt")
 }

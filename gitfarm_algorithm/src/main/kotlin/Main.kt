@@ -1,5 +1,3 @@
-package com.yamadalab.gitfarm
-
 import com.yamadalab.gitfarm.application.Random
 import com.yamadalab.gitfarm.domain.Item
 
