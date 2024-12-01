@@ -1,4 +1,4 @@
-#include "application/curl.h"
+#include "http/curl.h"
 
 int ExampleMethodGet()
 {

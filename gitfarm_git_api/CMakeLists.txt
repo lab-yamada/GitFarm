@@ -54,7 +54,7 @@ include_directories(
 )
 
 set(SOURCES
-    src/application/curl.c
+    src/http/curl.c
 )
 
 set(LIB_NAME
@@ -88,7 +88,7 @@ elseif(UNIX)
 endif()
 
 add_executable(test_runner
-    src/application/curl.c
+    src/http/curl.c
     test/test.c
 )
 

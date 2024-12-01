@@ -1,4 +1,4 @@
-#include "application/curl.h"
+#include "http/curl.h"
 
 int main(int argc, const char *const *argv)
 {
@@ -7,6 +7,6 @@ int main(int argc, const char *const *argv)
     {
         return -1;
     }
-    
+
     return 0;
 }
