@@ -4,7 +4,7 @@
 #include <utility>
 #include <iostream> 
 
-com::yamadalab::gitcha::Algorithm::SharedPtr algo = std::make_shared<com::yamadalab::gitcha::Algorithm>();
+com::yamadalab::gitfarm::Algorithm::SharedPtr algo = std::make_shared<com::yamadalab::gitfarm::Algorithm>();
 
 void wrs_test()
 {
@@ -24,9 +24,6 @@ void wrs_test()
         {"Item12", {1.2, 2}},
 
     };
-
-    const std::string &result = algo->draw(items);
-    printf("Item : %s\n", result.c_str());
 }
 
 int main(int argc, const char *const *argv)

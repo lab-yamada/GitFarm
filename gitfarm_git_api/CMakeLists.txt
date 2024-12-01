@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.31.0)
-project(gitfarm_algorithm VERSION 0.1.0 LANGUAGES C CXX)
+project(gitfarm_git_api VERSION 0.1.0 LANGUAGES C)
 
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
 
 if(APPLE)
     # macOS
@@ -40,21 +40,25 @@ if (JNI_FOUND)
     message (STATUS "JNI_AWT_LIBRARIES=${JNI_LIBRARIES}")
 endif()
 
+find_package(CURL REQUIRED)
+
+message(STATUS "CURL_INCLUDE_DIR=${CURL_INCLUDE_DIRS}")
+message(STATUS "CURL_LIBRARIES=${CURL_LIBRARIES}")
+
+
 include_directories(
     include/
+    ${CURL_INCLUDE_DIRS}/
     ${JAVA_INCLUDE_PATH}/
     ${JNI_INCLUDE_DIRS}/
 )
 
 set(SOURCES
-    src/algorithm/algorithm.cpp
-    src/jni/random.cpp
-    src/domain/item.cpp
-    src/jni/jni.c
+    src/application/curl.c
 )
 
 set(LIB_NAME
-    gitfarm_algorithm
+    gitfarm_git_api
 )
 
 add_library(${LIB_NAME} SHARED
@@ -62,6 +66,7 @@ add_library(${LIB_NAME} SHARED
 )
 
 target_link_libraries(${LIB_NAME}
+    ${CURL_LIBRARIES}
     ${JNI_LIBRARIES}
 )
 
@@ -83,7 +88,8 @@ elseif(UNIX)
 endif()
 
 add_executable(test_runner
-    test/test.cpp
+    src/application/curl.c
+    test/test.c
 )
 
 target_link_libraries(test_runner PRIVATE ${LIB_NAME})

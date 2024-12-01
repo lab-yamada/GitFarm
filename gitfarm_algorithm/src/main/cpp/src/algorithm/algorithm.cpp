@@ -1,53 +1,56 @@
 #include "algorithm/algorithm.hpp"
 
-com::yamadalab::gitcha::Algorithm::Algorithm()
+com::yamadalab::gitfarm::Algorithm::Algorithm()
 {
 }
 
-com::yamadalab::gitcha::Algorithm::~Algorithm()
+com::yamadalab::gitfarm::Algorithm::~Algorithm()
 {
 
 }
 
-com::yamadalab::gitcha::Item com::yamadalab::gitcha::Algorithm::wrs_draw(const std::vector<com::yamadalab::gitcha::Item>& items)
+std::vector<com::yamadalab::gitfarm::Item> com::yamadalab::gitfarm::Algorithm::get__items()
 {
-    com::yamadalab::gitcha::Item result_item;
+    return this->items_;
+}
+
+void com::yamadalab::gitfarm::Algorithm::set__items(const std::vector<com::yamadalab::gitfarm::Item> &items)
+{
+    this->items_ = items;
+}
+
+com::yamadalab::gitfarm::Item com::yamadalab::gitfarm::Algorithm::wrs_draw(const std::vector<com::yamadalab::gitfarm::Item>& items)
+{
+    com::yamadalab::gitfarm::Item result_item;
 
     int total_weight = 0;
 
-    for (const com::yamadalab::gitcha::Item& item : items)
+    for (const com::yamadalab::gitfarm::Item& item : items)
     {
         total_weight += item.get__weight();
     }
-
-    printf("WRS, total_weight : %d\n", total_weight);
 
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dist(0, total_weight - 1);
     int random_val = dist(gen);
 
-    printf("WRS, random_val : %d\n", random_val);
-
     int current_weight = 0;
-    for (const com::yamadalab::gitcha::Item& item : items)
+    for (const com::yamadalab::gitfarm::Item& item : items)
     {
         current_weight += item.get__weight();
 
         if (random_val < current_weight)
         {
-            printf("!!!!!!!! WRS, Selected : [%s] !!!!!!!!\n", item.get__id().c_str());
             result_item = item;
             return result_item;
         }
     }
 
-    printf("WRS, current_weight : %d\n", current_weight);
-
     throw std::runtime_error("wrs_random: No item selected, check weights and input data");
 }
 
-bool com::yamadalab::gitcha::Algorithm::pity_draw(int probability, int fail_count)
+bool com::yamadalab::gitfarm::Algorithm::pity_draw(int probability, int fail_count)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -59,63 +62,4 @@ bool com::yamadalab::gitcha::Algorithm::pity_draw(int probability, int fail_coun
     int roll = dist(gen);
 
     return roll <= current_chance;
-}
-
-std::string com::yamadalab::gitcha::Algorithm::draw(const std::vector<std::pair<std::string, std::pair<double, int>>> &raw_items)
-{
-    std::string draw_result_id = "";
-    if (raw_items.empty())
-    {
-        draw_result_id = "9999";
-        return draw_result_id;
-    }
-
-    com::yamadalab::gitcha::Item::SharedPtr item = std::make_shared<com::yamadalab::gitcha::Item>();
-    std::vector<com::yamadalab::gitcha::Item> filtered_items;
-
-    try
-    {
-        for (const std::pair<std::string, std::pair<double, int>> &raw_item : raw_items)
-        {
-            const std::string &id = raw_item.first;
-            item->set__id(id);
-
-            const std::pair<double, int> &raw_item_info = raw_item.second;
-            const double &probability = raw_item_info.first;
-            const int &fail_count = raw_item_info.second;
-
-            const bool &is_pity = this->pity_draw(probability, fail_count);
-
-            int weight = 0;
-
-            if (is_pity == true)
-            {
-                printf("Draw, Pity Weight : %s\n", id.c_str());
-                weight = probability + PITY_WEIGHT;
-            }
-            else
-            {
-                weight = probability;
-            }
-
-            item->set__weight(weight);
-            filtered_items.push_back(*item);
-            printf("Draw, Item: id = %s, probability = %f, weight = %d, fail_count = %d\n", id.c_str(), probability, weight, fail_count);
-        }
-
-        const com::yamadalab::gitcha::Item &drawed_item = this->wrs_draw(filtered_items);
-        draw_result_id = drawed_item.get__id();
-    }
-    catch (const std::runtime_error &re)
-    {
-        printf("Draw, %s\n", re.what());
-        draw_result_id = "5000";
-    }
-    catch (const std::exception &e)
-    {
-        printf("Draw, %s\n", e.what());
-        draw_result_id = "5000";
-    }
-
-    return draw_result_id;
 }

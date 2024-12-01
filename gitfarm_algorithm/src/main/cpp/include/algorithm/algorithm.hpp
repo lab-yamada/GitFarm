@@ -19,18 +19,20 @@ namespace com
 {
     namespace yamadalab
     {
-        namespace gitcha
+        namespace gitfarm
         {
             class Algorithm
             {
             private:
-                com::yamadalab::gitcha::Item wrs_draw(const std::vector<com::yamadalab::gitcha::Item>& items);
-                bool pity_draw(int probability, int fail_count);
+                std::vector<com::yamadalab::gitfarm::Item> items_;
 
             public:
                 explicit Algorithm();
                 virtual ~Algorithm();
-                std::string draw(const std::vector<std::pair<std::string, std::pair<double, int>>> &items);
+                std::vector<com::yamadalab::gitfarm::Item> get__items();
+                void set__items(const std::vector<com::yamadalab::gitfarm::Item> &items);
+                com::yamadalab::gitfarm::Item wrs_draw(const std::vector<com::yamadalab::gitfarm::Item>& items);
+                bool pity_draw(int probability, int fail_count);
 
             public:
                 using SharedPtr = std::shared_ptr<Algorithm>;
