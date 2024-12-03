@@ -1,4 +1,4 @@
-package com.yamadalab.gitfarm.domain
+package com.yamadalab.gitfarm.algorithm.domain
 
 data class Item(
     val id: String,

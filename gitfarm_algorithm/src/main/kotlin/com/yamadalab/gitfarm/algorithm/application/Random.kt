@@ -1,6 +1,6 @@
-package com.yamadalab.gitfarm.application;
+package com.yamadalab.gitfarm.algorithm.application;
 
-import com.yamadalab.gitfarm.domain.Item;
+import com.yamadalab.gitfarm.algorithm.domain.Item;
 import java.io.File;
 import java.io.FileNotFoundException;
 
@@ -25,8 +25,8 @@ class Random {
         }
     }
 
-    private external fun cSetItems(items: Array<Pair<String, Pair<Double, Int>>>): Unit;
-    private external fun cDraw(): Item;
+    private external fun nativeSetItems(items: Array<Pair<String, Pair<Double, Int>>>): Unit;
+    private external fun nativeDraw(): Item;
 
     public fun draw(items: Array<Item>): String {
         val itemList: MutableList<Pair<String, Pair<Double, Int>>> = mutableListOf();
@@ -43,9 +43,9 @@ class Random {
         }
 
         val citems: Array<Pair<String, Pair<Double, Int>>> = itemList.toTypedArray();
-        this.cSetItems(citems);
+        this.nativeSetItems(citems);
 
-        val drawItem: Item = this.cDraw();
+        val drawItem: Item = this.nativeDraw();
         return drawItem.id;
     }
 }

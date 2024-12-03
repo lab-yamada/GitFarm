@@ -1,5 +1,5 @@
-import com.yamadalab.gitfarm.application.Random
-import com.yamadalab.gitfarm.domain.Item
+import com.yamadalab.gitfarm.algorithm.application.Random
+import com.yamadalab.gitfarm.algorithm.domain.Item
 
 fun callDrawFunction() {
     val random: Random = Random();

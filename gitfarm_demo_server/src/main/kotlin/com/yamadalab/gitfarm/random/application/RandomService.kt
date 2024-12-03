@@ -1,7 +1,7 @@
 package com.yamadalab.gitfarm.random.application
 
-import com.yamadalab.gitfarm.application.Random
-import com.yamadalab.gitfarm.domain.Item
+import com.yamadalab.gitfarm.algorithm.application.Random
+import com.yamadalab.gitfarm.algorithm.domain.Item
 import lombok.RequiredArgsConstructor
 import org.springframework.stereotype.Service
 

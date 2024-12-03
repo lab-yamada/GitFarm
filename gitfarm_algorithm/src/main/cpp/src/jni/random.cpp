@@ -2,7 +2,8 @@
 
 com::yamadalab::gitfarm::Algorithm::SharedPtr algorithm_ = std::make_shared<com::yamadalab::gitfarm::Algorithm>();
 
-JNIEXPORT void JNICALL Java_com_yamadalab_gitfarm_application_Random_cSetItems(JNIEnv *jenv, jobject jobj, jobjectArray jitems)
+JNIEXPORT void JNICALL
+Java_com_yamadalab_gitfarm_algorithm_application_Random_nativeSetItems(JNIEnv *jenv, jobject jobj, jobjectArray jitems)
 {
     std::vector<com::yamadalab::gitfarm::Item> citems;
 
@@ -43,15 +44,11 @@ JNIEXPORT void JNICALL Java_com_yamadalab_gitfarm_application_Random_cSetItems(J
         jenv->ReleaseStringUTFChars(jitem_id, citem_id);
     }
 
-    // for (const com::yamadalab::gitfarm::Item &citem : citems)
-    // {
-    //     printf("%s, citem\n\tid : %s\n\tprobability : %f\n\tfail_count : %d\n", TAG, citem.get__id().c_str(), citem.get__probability(), citem.get__fail_count());
-    // }
-
     algorithm_->set__items(citems);
 }
 
-JNIEXPORT jobject JNICALL Java_com_yamadalab_gitfarm_application_Random_cDraw(JNIEnv *jenv, jobject jobj)
+JNIEXPORT jobject JNICALL
+Java_com_yamadalab_gitfarm_algorithm_application_Random_nativeDraw(JNIEnv *jenv, jobject jobj)
 {
     const std::vector<com::yamadalab::gitfarm::Item> &citems = algorithm_->get__items();
     if (citems.empty())
@@ -89,7 +86,7 @@ JNIEXPORT jobject JNICALL Java_com_yamadalab_gitfarm_application_Random_cDraw(JN
 
     const com::yamadalab::gitfarm::Item &cdraw_item = algorithm_->wrs_draw(cweighted_items);
 
-    const jclass &jitem_class = jenv->FindClass("com/yamadalab/gitfarm/domain/Item");
+    const jclass &jitem_class = jenv->FindClass("com/yamadalab/gitfarm/algorithm/domain/Item");
 
     if (jitem_class == nullptr)
     {

@@ -2,19 +2,25 @@
 #define HTTP_CURL__H
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <curl/curl.h>
 #include <curl/curlver.h>
 #include <curl/easy.h>
 #include <curl/urlapi.h>
 
+typedef struct CurlResponse {
+    char *response;
+    size_t size;
+} CurlResponse;
+
 extern CURL *curl_;
 
-int Curl_Init();
-int Curl_Fini();
-int Curl_GET(const char *url);
-int Curl_POST(const char *url);
-size_t Curl_Res_Callback(char* ptr, size_t size, size_t nmemb, const char* stream);
+int CurlInit();
+int CurlFini();
+int CurlRequestGET(const char *url);
+int CurlRequestPOST(const char *url);
+static size_t CurlResponseCallback(void *contents, size_t size, size_t nmemb, void *userp);
 int DoJsonRequest(const char* url, const char* body_data);
 
 #endif

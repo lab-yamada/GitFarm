@@ -2,31 +2,33 @@
 
 int main(int argc, const char *const *argv)
 {
-    const char *url = "http://localhost:8080/curl";
+    const char *get_url = "https://jsonplaceholder.typicode.com/posts/1";
 
     int rc = 0;
-    rc = Curl_Init();
+    rc = CurlInit();
 
     if (rc != 0)
     {
         return -1;
     }
 
-    // rc = Curl_GET(url);
-
-    // if (rc != 0)
-    // {
-    //     return -1;
-    // }
-
-    rc = Curl_POST(url);
+    rc = CurlRequestGET(get_url);
 
     if (rc != 0)
     {
         return -1;
     }
 
-    Curl_Fini();
+    const char *post_rul = "http://localhost:8080/curl";
+
+    rc = CurlRequestPOST(post_rul);
+
+    if (rc != 0)
+    {
+        return -1;
+    }
+
+    CurlFini();
 
     return 0;
 }

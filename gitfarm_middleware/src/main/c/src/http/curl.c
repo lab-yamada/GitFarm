@@ -2,7 +2,7 @@
 
 CURL *curl_;
 
-int Curl_Init()
+int CurlInit()
 {
 	int rc = 0;
 	curl_global_init(CURL_GLOBAL_ALL);
@@ -21,13 +21,13 @@ int Curl_Init()
 	return rc;
 }
 
-int Curl_Fini()
+int CurlFini()
 {
 	curl_easy_cleanup(curl_);
 	curl_global_cleanup();
 }
 
-int Curl_GET(const char *url)
+int CurlRequestGET(const char *url)
 {
 	int rc = 0;
 
@@ -37,69 +37,95 @@ int Curl_GET(const char *url)
 		return rc;
 	}
 
+	struct CurlResponse chunk = { .response = NULL, .size = 0 };
+
 	curl_easy_setopt(curl_, CURLOPT_URL, url);
+	curl_easy_setopt(curl_, CURLOPT_WRITEFUNCTION, CurlResponseCallback);
+    curl_easy_setopt(curl_, CURLOPT_WRITEDATA, (void *)&chunk);
 
 	CURLcode res = curl_easy_perform(curl_);
 
 	if (res != CURLE_OK)
 	{
 		fprintf(stderr, "Curl GET Response is not OK\n");
+		free(chunk.response);
 		return -1;
 	}
 	else
 	{
 		fprintf(stdout, "Curl GET Response is OK\n");
+		printf("Response:\n%s\n", chunk.response);
 	}
+
+	free(chunk.response);
 
 	return 0;
 }
 
-int Curl_POST(const char *url)
+int CurlRequestPOST(const char *url)
 {
-	if (curl_ == NULL)
-	{
-		fprintf(stderr, "Curl is NULL\n");
-		return -1;
-	}
+    if (curl_ == NULL)
+    {
+        fprintf(stderr, "Curl is NULL\n");
+        return -1;
+    }
 
-	struct curl_slist *header = NULL;
+    struct CurlResponse chunk = { .response = NULL, .size = 0 };
+    struct curl_slist *header = NULL;
 
-	curl_easy_setopt(curl_, CURLOPT_URL, url);
-	curl_easy_setopt(curl_, CURLOPT_POST, 1L);
+    const char *jsonData = "{\"key\":\"value\"}";
 
-	header = curl_slist_append(header, "Content-Type: application/json");
-	curl_easy_setopt(curl_, CURLOPT_HTTPHEADER, header);
+    header = curl_slist_append(header, "Content-Type: application/json");
 
-	curl_easy_setopt(curl_, CURLOPT_SSL_VERIFYPEER, 1L);
-	curl_easy_setopt(curl_, CURLOPT_SSL_VERIFYHOST, 1L);
+    curl_easy_setopt(curl_, CURLOPT_URL, url);
+    curl_easy_setopt(curl_, CURLOPT_POST, 1L);
+    curl_easy_setopt(curl_, CURLOPT_HTTPHEADER, header);
+    curl_easy_setopt(curl_, CURLOPT_POSTFIELDS, jsonData);
+    curl_easy_setopt(curl_, CURLOPT_WRITEFUNCTION, CurlResponseCallback);
+    curl_easy_setopt(curl_, CURLOPT_WRITEDATA, (void *)&chunk);
 
-	curl_easy_setopt(curl_, CURLOPT_POSTFIELDS, "data");
+    curl_easy_setopt(curl_, CURLOPT_SSL_VERIFYPEER, 0L);
+    curl_easy_setopt(curl_, CURLOPT_SSL_VERIFYHOST, 0L);
 
-	CURLcode res = curl_easy_perform(curl_);
+    CURLcode res = curl_easy_perform(curl_);
 
-	if (res != CURLE_OK)
-	{
-		curl_slist_free_all(header);
-		fprintf(stderr, "Curl POST Response is not OK\n");
-		return -1;
-	}
-	else
-	{
-		fprintf(stdout, "Curl POST Response is OK\n");
-	}
+    if (res != CURLE_OK)
+    {
+        fprintf(stderr, "Curl POST Response is not OK: %s\n", curl_easy_strerror(res));
+        curl_slist_free_all(header);
+        free(chunk.response);
+        return -1;
+    }
+    else
+    {
+        fprintf(stdout, "Curl POST Response is OK\n");
+        printf("Response:\n%s\n", chunk.response);
+    }
 
-	curl_slist_free_all(header);
+    curl_slist_free_all(header);
+    free(chunk.response);
 
-	return 0;
+    return 0;
 }
 
-size_t Curl_Res_Callback(char* ptr, size_t size, size_t nmemb, const char* stream)
-{
-	int real_size = size * nmemb;
+static size_t CurlResponseCallback(void *contents, size_t size, size_t nmemb, void *userp) {
+    size_t total_size = size * nmemb;
+    struct CurlResponse *mem = (struct CurlResponse *)userp;
 
-	fprintf(stdout, "Curl Res Callback real_size : %d\n", real_size);
+    char *ptr = realloc(mem->response, mem->size + total_size + 1);
 
-	return real_size;
+    if (ptr == NULL)
+	{
+        fprintf(stderr, "Not enough memory (realloc failed)\n");
+        return 0;
+    }
+
+    mem->response = ptr;
+    memcpy(&(mem->response[mem->size]), contents, total_size);
+    mem->size += total_size;
+    mem->response[mem->size] = '\0';
+
+    return total_size;
 }
 
 int DoJsonRequest(const char* url, const char* body_data)
@@ -125,7 +151,7 @@ int DoJsonRequest(const char* url, const char* body_data)
 	curl_easy_setopt(curl_, CURLOPT_POSTFIELDS, body_data);
 	curl_easy_setopt(curl_, CURLOPT_POSTFIELDSIZE, body_data_len);
 
-	curl_easy_setopt(curl_, CURLOPT_WRITEFUNCTION, Curl_Res_Callback); 
+	curl_easy_setopt(curl_, CURLOPT_WRITEFUNCTION, CurlResponseCallback); 
 
 	CURLcode res = curl_easy_perform(curl_);
 

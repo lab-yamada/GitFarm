@@ -1,7 +1,7 @@
 #include <jni.h>
 
-#ifndef _Included_com_yamadalab_gitfarm_Jni
-#define _Included_com_yamadalab_gitfarm_Jni
+#ifndef _Included_com_yamadalab_gitfarm_algorithm_Jni
+#define _Included_com_yamadalab_gitfarm_algorithm_Jni
 #ifdef __cplusplus
 extern "C" {
 #endif
