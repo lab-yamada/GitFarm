@@ -1,10 +1,11 @@
-package com.yamadalab.gitcha.random.presentation
+package com.yamadalab.gitfarm.random.presentation
 
-import com.yamadalab.gitcha.random.application.RandomService
+import com.yamadalab.gitfarm.random.application.RandomService
 import lombok.AllArgsConstructor
 import lombok.RequiredArgsConstructor
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -16,5 +17,10 @@ class RandomController(private val randomService: RandomService) {
     fun draw(): ResponseEntity<String> {
         val drawResult: String = randomService.draw();
         return ResponseEntity.ok().body(drawResult);
+    }
+
+    @PostMapping("/curl")
+    fun curl(): ResponseEntity<String> {
+        return ResponseEntity.ok().body("hi");
     }
 }

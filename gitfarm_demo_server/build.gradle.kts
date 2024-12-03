@@ -6,7 +6,7 @@ plugins {
 	id("org.jetbrains.kotlin.kapt") version "1.5.21"
 }
 
-group = "com.yamadalab.gitcha"
+group = "com.yamadalab.gitfarm"
 version = "0.0.1-SNAPSHOT"
 
 java {
@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-	implementation(files("../gitcha_algorithms/build/libs/gitcha_algorithms-1.0-SNAPSHOT.jar"))
+	implementation(files("../gitfarm_algorithm/build/libs/gitfarm_algorithm-1.0-SNAPSHOT.jar"))
 	implementation("org.springframework.boot:spring-boot-starter")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")

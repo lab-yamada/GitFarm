@@ -45,7 +45,6 @@ find_package(CURL REQUIRED)
 message(STATUS "CURL_INCLUDE_DIR=${CURL_INCLUDE_DIRS}")
 message(STATUS "CURL_LIBRARIES=${CURL_LIBRARIES}")
 
-
 include_directories(
     include/
     ${CURL_INCLUDE_DIRS}/
@@ -55,6 +54,7 @@ include_directories(
 
 set(SOURCES
     src/http/curl.c
+    src/jni/jni.c
 )
 
 set(LIB_NAME

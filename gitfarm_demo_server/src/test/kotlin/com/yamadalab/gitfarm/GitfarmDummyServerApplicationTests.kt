@@ -1,10 +1,10 @@
-package com.yamadalab.gitcha
+package com.yamadalab.gitfarm
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class GitchaDummyServerApplicationTests {
+class GitfarmDummyServerApplicationTests {
 
 	@Test
 	fun contextLoads() {

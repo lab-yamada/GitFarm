@@ -1,1 +1,1 @@
-rootProject.name = "gitcha_dummy_server"
+rootProject.name = "gitfarm_demo_server"

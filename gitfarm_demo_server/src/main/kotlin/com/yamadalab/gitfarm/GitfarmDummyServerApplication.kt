@@ -1,11 +1,11 @@
-package com.yamadalab.gitcha
+package com.yamadalab.gitfarm
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class GitchaDummyServerApplication
+class GitfarmDummyServerApplication
 
 fun main(args: Array<String>) {
-	runApplication<GitchaDummyServerApplication>(*args)
+	runApplication<GitfarmDummyServerApplication>(*args)
 }
