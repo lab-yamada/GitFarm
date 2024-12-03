@@ -1,9 +1,11 @@
-package com.yamadalab.gitfarm.random.application
+package com.yamadalab.gitfarm.random.application;
 
-import com.yamadalab.gitfarm.algorithm.application.Random
-import com.yamadalab.gitfarm.algorithm.domain.Item
-import lombok.RequiredArgsConstructor
-import org.springframework.stereotype.Service
+import com.yamadalab.gitfarm.algorithm.application.Random;
+import com.yamadalab.gitfarm.algorithm.domain.Item;
+import kotlinx.serialization.json.JsonObject;
+import kotlinx.serialization.json.JsonPrimitive;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -46,4 +48,21 @@ class RandomService {
 
         return drawResultId;
     }
+
+    fun createJsonObject(): JsonObject {
+        return JsonObject(
+            mapOf(
+                "key1" to JsonPrimitive("value1"),
+                "key2" to JsonPrimitive(123),
+                "key3" to JsonPrimitive(true),
+                "nested" to JsonObject(
+                    mapOf(
+                        "nestedKey" to JsonPrimitive("nestedValue")
+                    )
+                )
+            )
+        )
+    }
+
+
 }

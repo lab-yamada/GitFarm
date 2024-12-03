@@ -19,16 +19,5 @@ int main(int argc, const char *const *argv)
         return -1;
     }
 
-    const char *post_rul = "http://localhost:8080/curl";
-
-    rc = CurlRequestPOST(post_rul);
-
-    if (rc != 0)
-    {
-        return -1;
-    }
-
-    CurlFini();
-
     return 0;
 }

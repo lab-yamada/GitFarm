@@ -1,22 +1,23 @@
 #include "jni/jni.h"
 
 JNIEXPORT jstring JNICALL
-Java_com_yamadalab_gitfarm_middleware_nativePostRequest(JNIEnv *env, jobject obj, jstring jUrl) {
-    const char *cUrl = (*env)->GetStringUTFChars(env, jUrl, NULL);
+Java_com_yamadalab_gitfarm_middleware_application_GitCurl_nativePostRequest(JNIEnv *jenv, jobject jobj, jstring jUrl) {
+    int rc = 0;
+    rc = CurlInit();
 
-    struct CurlResponse chunk = {.response = NULL, .size = 0};
-    int result = CurlRequestPOST(cUrl);
-
-    (*env)->ReleaseStringUTFChars(env, jUrl, cUrl);
-
-    if (result != 0 || chunk.response == NULL)
+    if (rc != 0)
     {
         return NULL;
     }
 
-    jstring jResponse = (*env)->NewStringUTF(env, chunk.response);
+    const char *cUrl = (*jenv)->GetStringUTFChars(jenv, jUrl, NULL);
+    printf("Post, url : %s\n", cUrl);
 
-    free(chunk.response);
+    char *cResponse = CurlRequestPOST(cUrl);
+    jstring jResponse = (*jenv)->NewStringUTF(jenv, cResponse);
+
+    (*jenv)->ReleaseStringUTFChars(jenv, jUrl, cUrl);
+    (*jenv)->ReleaseStringUTFChars(jenv, jResponse, cResponse);
 
     return jResponse;
 }

@@ -19,7 +19,7 @@ extern CURL *curl_;
 int CurlInit();
 int CurlFini();
 int CurlRequestGET(const char *url);
-int CurlRequestPOST(const char *url);
+char *CurlRequestPOST(const char *url);
 static size_t CurlResponseCallback(void *contents, size_t size, size_t nmemb, void *userp);
 int DoJsonRequest(const char* url, const char* body_data);
 

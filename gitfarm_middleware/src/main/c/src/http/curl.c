@@ -62,12 +62,12 @@ int CurlRequestGET(const char *url)
 	return 0;
 }
 
-int CurlRequestPOST(const char *url)
+char *CurlRequestPOST(const char *url)
 {
     if (curl_ == NULL)
     {
         fprintf(stderr, "Curl is NULL\n");
-        return -1;
+        return NULL;
     }
 
     struct CurlResponse chunk = { .response = NULL, .size = 0 };
@@ -94,7 +94,7 @@ int CurlRequestPOST(const char *url)
         fprintf(stderr, "Curl POST Response is not OK: %s\n", curl_easy_strerror(res));
         curl_slist_free_all(header);
         free(chunk.response);
-        return -1;
+        return NULL;
     }
     else
     {
@@ -103,9 +103,8 @@ int CurlRequestPOST(const char *url)
     }
 
     curl_slist_free_all(header);
-    free(chunk.response);
-
-    return 0;
+    
+	return chunk.response;
 }
 
 static size_t CurlResponseCallback(void *contents, size_t size, size_t nmemb, void *userp) {

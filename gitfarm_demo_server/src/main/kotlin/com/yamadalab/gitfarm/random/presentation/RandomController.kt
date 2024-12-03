@@ -1,12 +1,12 @@
-package com.yamadalab.gitfarm.random.presentation
+package com.yamadalab.gitfarm.random.presentation;
 
-import com.yamadalab.gitfarm.random.application.RandomService
-import lombok.AllArgsConstructor
-import lombok.RequiredArgsConstructor
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RestController
+import com.yamadalab.gitfarm.random.application.RandomService;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,6 +21,6 @@ class RandomController(private val randomService: RandomService) {
 
     @PostMapping("/curl")
     fun curl(): ResponseEntity<String> {
-        return ResponseEntity.ok().body("hi");
+        return ResponseEntity.ok().body(randomService.createJsonObject().toString());
     }
 }

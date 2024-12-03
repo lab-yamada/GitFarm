@@ -8,7 +8,7 @@ extern "C" {
 #endif
 
 JNIEXPORT jstring JNICALL
-Java_com_yamadalab_gitfarm_middleware_nativePostRequest(JNIEnv *env, jobject obj, jstring jUrl);
+Java_com_yamadalab_gitfarm_middleware_application_GitCurl_nativePostRequest(JNIEnv *jenv, jobject jobj, jstring jUrl);
 
 #ifdef __cplusplus
 }
