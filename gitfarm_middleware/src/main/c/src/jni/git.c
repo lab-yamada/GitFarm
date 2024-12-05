@@ -44,7 +44,7 @@ Java_com_yamadalab_gitfarm_middleware_application_Git_nativeGetCommits(JNIEnv *j
 
     if (cResponse == NULL)
     {
-        fprintf(strerror, "%s, GetCommits Response is NULL\n", LOG_JNI);
+        fprintf(stderr, "%s, GetCommits Response is NULL\n", LOG_JNI);
         return NULL;
     }
 
