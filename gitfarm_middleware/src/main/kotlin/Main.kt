@@ -1,17 +1,20 @@
-import com.yamadalab.gitfarm.middleware.application.GitCurl
+import com.yamadalab.gitfarm.middleware.application.Git
 
 import kotlinx.serialization.json.*
 
 fun main() {
 
-    val gitCurl: GitCurl = GitCurl();
+    val gitCurl: Git = Git();
 
-    val data: String = gitCurl.nativePostRequest("http://localhost:8080/curl");
+    val headerArray: Array<String> = arrayOf(
+        "Accept: application/vnd.github.cloak-preview",
+        "User-Agent: MyApp/1.0"
+    );
+
+    val data: String = gitCurl.nativeGetCommits("reidlo5135", "2024-01-13", null);
     println("GitCurl data : $data");
 
     val jsonObject = Json.parseToJsonElement(data).jsonObject;
 
-    println(jsonObject["key1"]?.jsonPrimitive?.content);
-    println(jsonObject["key2"]?.jsonPrimitive?.int);
-    println(jsonObject["nested"]?.jsonObject?.get("nestedKey")?.jsonPrimitive?.content);
+    println(jsonObject["total_count"]?.jsonPrimitive?.int);
 }

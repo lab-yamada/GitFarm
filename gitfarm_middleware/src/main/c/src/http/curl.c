@@ -27,62 +27,129 @@ int CurlFini()
 	curl_global_cleanup();
 }
 
-int CurlRequestGET(const char *url)
+void CurlHeaderAdd(CurlHeader **head, const char *headerName)
 {
-	int rc = 0;
+    CurlHeader *newHeader = (CurlHeader *)malloc(sizeof(CurlHeader));
 
-	if (curl_ == NULL)
+    if (!newHeader)
 	{
-		rc = -1;
-		return rc;
+        perror("Failed to allocate memory for new header");
+        return;
+    }
+
+    strcpy(newHeader->data.name, headerName);
+    newHeader->link = NULL;
+
+    if (*head == NULL)
+	{
+        *head = newHeader;
+    }
+	else
+	{
+        CurlHeader *current = *head;
+        while (current->link != NULL)
+		{
+            current = current->link;
+        }
+        current->link = newHeader;
+    }
+}
+
+void CurlHeaderFini(CurlHeader *head)
+{
+	CurlHeader *temp;
+	while (head != NULL)
+	{
+		temp = head;
+		head = head->link;
+		free(temp);
+	}
+}
+
+char *CurlRequestGET(const char *url, CurlHeader *headerArray)
+{
+	if (curl_ == NULL)
+    {
+        fprintf(stderr, "%s, Curl is NULL\n", LOG_GET);
+        return NULL;
+    }
+
+	CurlResponse response = {NULL, 0};
+	struct curl_slist *header = NULL;
+
+	CurlHeader *current = headerArray;
+    while (current != NULL)
+	{
+		fprintf(stdout, "%s, Header : %s\n", LOG_GET, current->data.name);
+        header = curl_slist_append(header, current->data.name);
+        current = current->link;
+    }
+
+	if (header == NULL)
+	{
+		fprintf(stderr, "%s, Header is NULL\n", LOG_GET);
+		return NULL;
 	}
 
-	struct CurlResponse chunk = { .response = NULL, .size = 0 };
-
 	curl_easy_setopt(curl_, CURLOPT_URL, url);
+	curl_easy_setopt(curl_, CURLOPT_HTTPHEADER, header);
 	curl_easy_setopt(curl_, CURLOPT_WRITEFUNCTION, CurlResponseCallback);
-    curl_easy_setopt(curl_, CURLOPT_WRITEDATA, (void *)&chunk);
+    curl_easy_setopt(curl_, CURLOPT_WRITEDATA, (void *)&response);
 
 	CURLcode res = curl_easy_perform(curl_);
 
 	if (res != CURLE_OK)
 	{
-		fprintf(stderr, "Curl GET Response is not OK\n");
-		free(chunk.response);
-		return -1;
+		fprintf(stderr, "%s, Response is not OK\n", LOG_GET);
+		curl_slist_free_all(header);
+        free(response.response);
+		return NULL;
 	}
 	else
-	{
-		fprintf(stdout, "Curl GET Response is OK\n");
-		printf("Response:\n%s\n", chunk.response);
-	}
+    {
+        fprintf(stdout, "%s, Response is OK\n", LOG_GET);
+    	fprintf(stdout, "%s, ===== Response =====\n%s\n====================================================\n", LOG_GET, response.response);
+    }
 
-	free(chunk.response);
+	CurlHeaderFini(headerArray);
+    curl_slist_free_all(header);
 
-	return 0;
+	return response.response;
 }
 
-char *CurlRequestPOST(const char *url)
+char *CurlRequestPOST(const char *url, CurlHeader *headerArray)
 {
     if (curl_ == NULL)
     {
-        fprintf(stderr, "Curl is NULL\n");
+        fprintf(stderr, "%s, Curl is NULL\n", LOG_POST);
         return NULL;
     }
 
-    struct CurlResponse chunk = { .response = NULL, .size = 0 };
+    CurlResponse response = {NULL, 0};
     struct curl_slist *header = NULL;
 
     const char *jsonData = "{\"key\":\"value\"}";
 
-    header = curl_slist_append(header, "Content-Type: application/json");
+	CurlHeader *current = headerArray;
+    while (current != NULL)
+	{
+		fprintf(stdout, "%s, Header : %s\n", LOG_POST, current->data.name);
+        header = curl_slist_append(header, current->data.name);
+        current = current->link;
+    }
+
+	if (header == NULL)
+	{
+		fprintf(stderr, "%s, Header is NULL\n", LOG_POST);
+		return NULL;
+	}
 
     curl_easy_setopt(curl_, CURLOPT_URL, url);
     curl_easy_setopt(curl_, CURLOPT_POST, 1L);
     curl_easy_setopt(curl_, CURLOPT_HTTPHEADER, header);
     curl_easy_setopt(curl_, CURLOPT_POSTFIELDS, jsonData);
     curl_easy_setopt(curl_, CURLOPT_WRITEFUNCTION, CurlResponseCallback);
-    curl_easy_setopt(curl_, CURLOPT_WRITEDATA, (void *)&chunk);
+    curl_easy_setopt(curl_, CURLOPT_WRITEDATA, (void *)&response);
 
     curl_easy_setopt(curl_, CURLOPT_SSL_VERIFYPEER, 0L);
     curl_easy_setopt(curl_, CURLOPT_SSL_VERIFYHOST, 0L);
@@ -91,23 +158,25 @@ char *CurlRequestPOST(const char *url)
 
     if (res != CURLE_OK)
     {
-        fprintf(stderr, "Curl POST Response is not OK: %s\n", curl_easy_strerror(res));
+        fprintf(stderr, "%s, Response is not OK: %s\n", LOG_POST, curl_easy_strerror(res));
         curl_slist_free_all(header);
-        free(chunk.response);
+        free(response.response);
         return NULL;
     }
     else
     {
-        fprintf(stdout, "Curl POST Response is OK\n");
-        printf("Response:\n%s\n", chunk.response);
+        fprintf(stdout, "%s, Response is OK\n", LOG_POST);
+    	fprintf(stdout, "%s, ===== Response =====\n%s\n====================================================\n", LOG_POST, response.response);
     }
 
+	CurlHeaderFini(headerArray);
     curl_slist_free_all(header);
     
-	return chunk.response;
+	return response.response;
 }
 
-static size_t CurlResponseCallback(void *contents, size_t size, size_t nmemb, void *userp) {
+static size_t CurlResponseCallback(void *contents, size_t size, size_t nmemb, void *userp)
+{
     size_t total_size = size * nmemb;
     struct CurlResponse *mem = (struct CurlResponse *)userp;
 
@@ -125,47 +194,4 @@ static size_t CurlResponseCallback(void *contents, size_t size, size_t nmemb, vo
     mem->response[mem->size] = '\0';
 
     return total_size;
-}
-
-int DoJsonRequest(const char* url, const char* body_data)
-{
-	if (curl_ == NULL)
-	{
-		return -1;
-	}
-
-	int body_data_len = strlen(body_data);
-	struct curl_slist *header = NULL;
-
-	curl_easy_setopt(curl_, CURLOPT_URL, url);
-
-	header = curl_slist_append(header, "Content-Type: application/json");
-	curl_easy_setopt(curl_, CURLOPT_HTTPHEADER, header);
-
-	curl_easy_setopt(curl_, CURLOPT_SSL_VERIFYPEER, 0);
-	curl_easy_setopt(curl_, CURLOPT_SSL_VERIFYHOST, 0);
-
-	curl_easy_setopt(curl_, CURLOPT_POST, 1L);
-
-	curl_easy_setopt(curl_, CURLOPT_POSTFIELDS, body_data);
-	curl_easy_setopt(curl_, CURLOPT_POSTFIELDSIZE, body_data_len);
-
-	curl_easy_setopt(curl_, CURLOPT_WRITEFUNCTION, CurlResponseCallback); 
-
-	CURLcode res = curl_easy_perform(curl_);
-
-	if (res != CURLE_OK)
-	{
-		curl_slist_free_all(header);
-		fprintf(stderr, "\nCurl POST Response is not OK\n");
-		return -1;
-	}
-	else
-	{
-		fprintf(stdout, "\nCurl POST Response is OK\n");
-	}
-
-	curl_slist_free_all(header);
-
-	return 0;
 }

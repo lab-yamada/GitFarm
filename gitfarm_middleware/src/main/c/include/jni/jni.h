@@ -1,14 +1,16 @@
 #include <jni.h>
-#include "http/curl.h"
 
-#ifndef _Included_com_yamadalab_gitfarm_middleware_Jni
-#define _Included_com_yamadalab_gitfarm_middleware_Jni
+#ifndef _Included_com_yamadalab_gitfarm_algorithm_Jni
+#define _Included_com_yamadalab_gitfarm_algorithm_Jni
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-JNIEXPORT jstring JNICALL
-Java_com_yamadalab_gitfarm_middleware_application_GitCurl_nativePostRequest(JNIEnv *jenv, jobject jobj, jstring jUrl);
+jint JNI_parse_to_jint(JNIEnv *jenv, jobject jobj);
+jstring JNI_parse_to_jstring(JNIEnv *jenv, jobject jobj);
+jdouble JNI_parse_to_jdouble(JNIEnv *jenv, jobject jobj);
+jfloat JNI_parse_to_jfloat(JNIEnv *jenv, jobject jobj);
+
 
 #ifdef __cplusplus
 }
