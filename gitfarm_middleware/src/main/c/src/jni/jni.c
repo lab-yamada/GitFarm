@@ -1,23 +1,27 @@
 #include "jni/jni.h"
 
-JNIEXPORT jstring JNICALL
-Java_com_yamadalab_gitfarm_middleware_application_GitCurl_nativePostRequest(JNIEnv *jenv, jobject jobj, jstring jUrl) {
-    int rc = 0;
-    rc = CurlInit();
+jint JNI_parse_to_jint(JNIEnv *jenv, jobject jobj)
+{
+    jclass jint_class = (*jenv)->FindClass(jenv, "java/lang/Integer");
+    jmethodID int_value_method = (*jenv)->GetMethodID(jenv, jint_class, "intValue", "()I");
+    return (*jenv)->CallIntMethod(jenv, jobj, int_value_method);
+}
 
-    if (rc != 0)
-    {
-        return NULL;
-    }
+jstring JNI_parse_to_jstring(JNIEnv *jenv, jobject jobj)
+{
+    return (jstring)jobj;
+}
 
-    const char *cUrl = (*jenv)->GetStringUTFChars(jenv, jUrl, NULL);
-    printf("Post, url : %s\n", cUrl);
+jdouble JNI_parse_to_jdouble(JNIEnv *jenv, jobject jobj)
+{
+    jclass jdouble_class = (*jenv)->FindClass(jenv, "java/lang/Double");
+    jmethodID double_value_method = (*jenv)->GetMethodID(jenv, jdouble_class, "doubleValue", "()D");
+    return (*jenv)->CallDoubleMethod(jenv, jobj, double_value_method);
+}
 
-    char *cResponse = CurlRequestPOST(cUrl);
-    jstring jResponse = (*jenv)->NewStringUTF(jenv, cResponse);
-
-    (*jenv)->ReleaseStringUTFChars(jenv, jUrl, cUrl);
-    (*jenv)->ReleaseStringUTFChars(jenv, jResponse, cResponse);
-
-    return jResponse;
+jfloat JNI_parse_to_jfloat(JNIEnv *jenv, jobject jobj)
+{
+    jclass jfloat_class = (*jenv)->FindClass(jenv, "java/lang/Float");
+    jmethodID float_value_method = (*jenv)->GetMethodID(jenv, jfloat_class, "floatValue", "()F");
+    return (*jenv)->CallFloatMethod(jenv, jobj, float_value_method);
 }

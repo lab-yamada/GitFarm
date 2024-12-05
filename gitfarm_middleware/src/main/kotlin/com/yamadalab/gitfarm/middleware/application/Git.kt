@@ -3,7 +3,7 @@ package com.yamadalab.gitfarm.middleware.application;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-class GitCurl {
+class Git {
 
     companion object {
         init {
@@ -24,5 +24,5 @@ class GitCurl {
         }
     }
 
-    external fun nativePostRequest(url: String): String;
+    external fun nativeGetCommits(user:String, date: String, token: String?): String;
 }

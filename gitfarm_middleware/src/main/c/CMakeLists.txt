@@ -55,6 +55,7 @@ include_directories(
 set(SOURCES
     src/http/curl.c
     src/jni/jni.c
+    src/jni/git.c
 )
 
 set(LIB_NAME
