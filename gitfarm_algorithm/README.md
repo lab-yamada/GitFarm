@@ -1,9 +1,9 @@
-# GitFarm Middleware
+# GitFarm Alogrithm
 
 <hr>
 
 ## Document
-- [GitFarm MiddleWare](#gitfarm-middleware)
+- [GitFarm Alogrithm](#gitfarm-algorithm)
     - [Document](#document)
     - [Environment](#1-environment)
     - [SetUp Installation](#2-setup-installation)
@@ -14,7 +14,7 @@
     - [Run Test](#4-test)
 
 ## 1. Environment
-* ![C](https://img.shields.io/badge/c-%2300599C.svg?style=for-the-badge&logo=c&logoColor=white)
+* ![C++](https://img.shields.io/badge/c++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white)
 * ![CMake](https://img.shields.io/badge/CMake-%23008FBA.svg?style=for-the-badge&logo=cmake&logoColor=white)
 * ![Kotlin](https://img.shields.io/badge/kotlin-%237F52FF.svg?style=for-the-badge&logo=kotlin&logoColor=white)
 * ![Gradle](https://img.shields.io/badge/Gradle-02303A.svg?style=for-the-badge&logo=Gradle&logoColor=white)
@@ -42,12 +42,11 @@ git clone -b Linux/Release/Beta https://github.com/lab-yamada/GitFarm.git
 
 ### 3-2. Build Project
 ```bash
-cd ~/GitFarm
+cd ~/GitFarm/
 sudo chmod +x ./configure.sh
 ./configure.sh
 ```
 
 ## 4. Test
 ```bash
-
 ```
