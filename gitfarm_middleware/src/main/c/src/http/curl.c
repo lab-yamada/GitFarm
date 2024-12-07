@@ -108,7 +108,7 @@ char *CurlRequestGET(const char *url, CurlHeader *headerArray)
 	else
     {
         fprintf(stdout, "%s, Response is OK\n", LOG_GET);
-    	fprintf(stdout, "%s, ===== Response =====\n%s\n====================================================\n", LOG_GET, response.response);
+    	// fprintf(stdout, "%s, ===== Response =====\n%s\n====================================================\n", LOG_GET, response.response);
     }
 
 	CurlHeaderFini(headerArray);
@@ -166,7 +166,7 @@ char *CurlRequestPOST(const char *url, CurlHeader *headerArray)
     else
     {
         fprintf(stdout, "%s, Response is OK\n", LOG_POST);
-    	fprintf(stdout, "%s, ===== Response =====\n%s\n====================================================\n", LOG_POST, response.response);
+    	// fprintf(stdout, "%s, ===== Response =====\n%s\n====================================================\n", LOG_POST, response.response);
     }
 
 	CurlHeaderFini(headerArray);
