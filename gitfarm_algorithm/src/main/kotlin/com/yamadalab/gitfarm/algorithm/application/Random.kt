@@ -9,7 +9,8 @@ class Random {
     companion object {
         init {
             val userHome: String = System.getProperty("user.home");
-            val cppLibPath: String = "$userHome/GitFarm/gitfarm_algorithm/src/main/cpp/build/lib";
+            val gitFarmHome: String = System.getenv("GITFARM_HOME") ?: "GitFarm";
+            val cppLibPath: String = "$userHome/$gitFarmHome/gitfarm_algorithm/src/main/cpp/build/lib";
             val cppLibName: String = System.mapLibraryName("gitfarm_algorithm");
             val cppLibFullPath: String = "$cppLibPath/$cppLibName";
 
