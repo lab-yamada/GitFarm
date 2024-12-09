@@ -1,22 +1,14 @@
-package com.yamadalab.gitfarm.algorithm.application;
+package com.yamadalab.gitfarm.middleware.algorithm;
 
-import com.yamadalab.gitfarm.algorithm.domain.Item;
-import java.io.File;
-import java.io.FileNotFoundException;
+import com.yamadalab.gitfarm.middleware.utils.Utils
+import java.io.*
 
 class Random {
 
     companion object {
         init {
-            val userHome: String = System.getProperty("user.home");
-            val cppLibPath: String = "$userHome/GitFarm/gitfarm_algorithm/src/main/cpp/build/lib";
-            val cppLibName: String = System.mapLibraryName("gitfarm_algorithm");
-            val cppLibFullPath: String = "$cppLibPath/$cppLibName";
-
             try {
-                val cppLibFile: File = File(cppLibFullPath);
-                println("CPP Library Path : ${cppLibFile.absolutePath}");
-                System.load(cppLibFile.absolutePath);
+                Utils.loadSharedLibrary("gitfarm_algorithm");
             } catch (usle: UnsatisfiedLinkError) {
                 println("$usle");
             } catch (fne: FileNotFoundException) {
