@@ -8,14 +8,14 @@
 #define GITHUB_USER_AGENT_HEADER "User-Agent: MyApp/1.0"
 #define GITHUB_AUTH_HEADER_FORMAT "Authorization: Bearer %s"
 
-#ifndef _Included_com_yamadalab_gitfarm_middleware_Git
-#define _Included_com_yamadalab_gitfarm_middleware_Git
+#ifndef _Included_com_yamadalab_gitfarm_middleware_gclient_Git
+#define _Included_com_yamadalab_gitfarm_middleware_gclient_Git
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 JNIEXPORT jstring JNICALL
-Java_com_yamadalab_gitfarm_middleware_application_Git_nativeGetCommits(JNIEnv *jenv, jobject jobj, jstring jUser, jstring jStartDate, jstring jEndDate, jstring jToken);
+Java_com_yamadalab_gitfarm_middleware_gclient_Git_nativeGetCommits(JNIEnv *jenv, jobject jobj, jstring jUser, jstring jStartDate, jstring jEndDate, jstring jToken);
 
 #ifdef __cplusplus
 }

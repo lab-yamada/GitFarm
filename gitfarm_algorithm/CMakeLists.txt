@@ -67,7 +67,7 @@ target_link_libraries(${LIB_NAME}
 
 set_target_properties(${LIB_NAME} PROPERTIES
     OUTPUT_NAME ${LIB_NAME}
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+    LIBRARY_OUTPUT_DIRECTORY ../../gitfarm_middleware/src/main/resources/libs/
 )
 
 if(APPLE)

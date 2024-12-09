@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.31.0)
-project(gitfarm_middleware VERSION 0.1.0 LANGUAGES C)
+project(gitfarm_gclient VERSION 0.1.0 LANGUAGES C)
 
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -59,7 +59,7 @@ set(SOURCES
 )
 
 set(LIB_NAME
-    gitfarm_middleware
+    gitfarm_gclient
 )
 
 add_library(${LIB_NAME} SHARED
@@ -73,7 +73,7 @@ target_link_libraries(${LIB_NAME}
 
 set_target_properties(${LIB_NAME} PROPERTIES
     OUTPUT_NAME ${LIB_NAME}
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+    LIBRARY_OUTPUT_DIRECTORY ../../gitfarm_middleware/src/main/resources/libs/
 )
 
 if(APPLE)

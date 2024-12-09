@@ -1,7 +1,7 @@
 #include "jni/git.h"
 
 JNIEXPORT jstring JNICALL
-Java_com_yamadalab_gitfarm_middleware_application_Git_nativeGetCommits(JNIEnv *jenv, jobject jobj, jstring jUser, jstring jStartDate, jstring jEndDate, jstring jToken)
+Java_com_yamadalab_gitfarm_middleware_gclient_Git_nativeGetCommits(JNIEnv *jenv, jobject jobj, jstring jUser, jstring jStartDate, jstring jEndDate, jstring jToken)
 {
     int rc = CurlInit();
 
