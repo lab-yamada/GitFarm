@@ -1,6 +1,8 @@
-import com.yamadalab.gitfarm.middleware.algorithm.Item
-import com.yamadalab.gitfarm.middleware.algorithm.Random
-import com.yamadalab.gitfarm.middleware.gclient.Git
+
+import com.yamadalab.gitfarm.middleware.algorithm.Item;
+import com.yamadalab.gitfarm.middleware.algorithm.Random;
+import com.yamadalab.gitfarm.middleware.git.GitClient;
+import kotlinx.coroutines.runBlocking;
 
 fun main() {
     val random: Random = Random();
@@ -31,7 +33,9 @@ fun main() {
         println("DrawResultID : [$drawResultId]");
     }
 
-    val git: Git = Git();
-    val i = git.getCommitsTotalCount();
-    println("git : $i");
+    val gitClient: GitClient = GitClient();
+    runBlocking {
+        val totalContributions: Int = gitClient.getTotalContributionsByYear("reidlo5135", "2024");
+        println("totalContributions : $totalContributions");
+    }
 }
