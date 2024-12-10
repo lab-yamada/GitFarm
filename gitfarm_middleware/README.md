@@ -14,8 +14,6 @@
     - [Run Test](#4-test)
 
 ## 1. Environment
-* ![C](https://img.shields.io/badge/c-%2300599C.svg?style=for-the-badge&logo=c&logoColor=white)
-* ![CMake](https://img.shields.io/badge/CMake-%23008FBA.svg?style=for-the-badge&logo=cmake&logoColor=white)
 * ![Kotlin](https://img.shields.io/badge/kotlin-%237F52FF.svg?style=for-the-badge&logo=kotlin&logoColor=white)
 * ![Gradle](https://img.shields.io/badge/Gradle-02303A.svg?style=for-the-badge&logo=Gradle&logoColor=white)
 * ![openJDK](https://img.shields.io/badge/openjdk17-white.svg?style=for-the-badge&logo=openjdk&logoColor=black)
@@ -42,9 +40,7 @@ git clone -b Linux/Release/Beta https://github.com/lab-yamada/GitFarm.git
 
 ### 3-2. Build Project
 ```bash
-cd ~/GitFarm
-sudo chmod +x ./configure.sh
-./configure.sh
+
 ```
 
 ## 4. Test

@@ -1,4 +1,4 @@
-package com.yamadalab.gitfarm.middleware.git;
+package com.yamadalab.gitfarm.middleware.git.domain;
 
 import kotlinx.serialization.Serializable;
 
