@@ -1,4 +1,4 @@
-package com.yamadalab.gitfarm.middleware.git;
+package com.yamadalab.gitfarm.middleware.git.application;
 
 import com.yamadalab.gitfarm.middleware.git.domain.GitConstants
 import com.yamadalab.gitfarm.middleware.git.domain.GitUser

@@ -1,7 +1,7 @@
 
 import com.yamadalab.gitfarm.middleware.algorithm.Item;
 import com.yamadalab.gitfarm.middleware.algorithm.Random;
-import com.yamadalab.gitfarm.middleware.git.GitClient;
+import com.yamadalab.gitfarm.middleware.git.application.GitClient;
 import kotlinx.coroutines.runBlocking;
 
 fun main() {
