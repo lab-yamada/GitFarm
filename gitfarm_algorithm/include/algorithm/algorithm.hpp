@@ -1,5 +1,5 @@
-#ifndef ALGORITHM__HPP
-#define ALGORITHM__HPP
+#ifndef GITFARM_ALGORITHM__HPP
+#define GITFARM_ALGORITHM__HPP
 
 #include <iostream>
 #include <vector>
@@ -12,34 +12,37 @@
 #include <cmath>
 
 #include "domain/item.hpp"
+#include "domain/user.hpp"
 
-constexpr int PITY_WEIGHT = 1;
+constexpr double PITY_WEIGHT = 0.00001;
+constexpr int PITY_MAX_WEIGHT = 100;
 
-namespace com
+namespace com::yamadalab::gitfarm
 {
-    namespace yamadalab
+    class Algorithm final
     {
-        namespace gitfarm
-        {
-            class Algorithm
-            {
-            private:
-                std::vector<com::yamadalab::gitfarm::Item> items_;
+    private:
+        std::vector<Item> items_;
+        User::SharedPtr user_ = nullptr;
+        bool is_ready_to_draw();
+        void weight_items_by_grade();
+        void weight_items_by_pity();
+        Item::SharedPtr weight_random_select();
+        static bool pity_select(const int &weight, const int &fail_count);
 
-            public:
-                explicit Algorithm();
-                virtual ~Algorithm();
-                std::vector<com::yamadalab::gitfarm::Item> get__items();
-                void set__items(const std::vector<com::yamadalab::gitfarm::Item> &items);
-                com::yamadalab::gitfarm::Item wrs_draw(const std::vector<com::yamadalab::gitfarm::Item>& items);
-                bool pity_draw(int probability, int fail_count);
+    public:
+        explicit Algorithm();
+        virtual ~Algorithm();
+        std::vector<Item> get__items() const;
+        void set__items(const std::vector<Item> &items);
+        User::SharedPtr get__user() const;
+        void set__user(const User::SharedPtr &user);
+        Item::SharedPtr draw();
 
-            public:
-                using SharedPtr = std::shared_ptr<Algorithm>;
+    public:
+        using SharedPtr = std::shared_ptr<Algorithm>;
 
-            };
-        }
-    }
+    };
 }
 
 #endif

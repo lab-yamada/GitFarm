@@ -2,113 +2,138 @@
 
 com::yamadalab::gitfarm::Algorithm::SharedPtr algorithm_ = std::make_shared<com::yamadalab::gitfarm::Algorithm>();
 
-JNIEXPORT void JNICALL
-Java_com_yamadalab_gitfarm_middleware_algorithm_Random_nativeSetItems(JNIEnv *jenv, jobject jobj, jobjectArray jitems)
+JNIEXPORT jboolean JNICALL
+Java_com_yamadalab_gitfarm_middleware_algorithm_application_Random_nativeSetItems(JNIEnv *jEnv, jobject jObj, jobjectArray jItems)
 {
-    std::vector<com::yamadalab::gitfarm::Item> citems;
+    std::vector<com::yamadalab::gitfarm::Item> cItems;
 
-    const jsize &jitem_size = jenv->GetArrayLength(jitems);
+    const jsize &jItemSize = jEnv->GetArrayLength(jItems);
 
-    for (jsize i=0;i<jitem_size;i++)
+    for (jsize i=0;i<jItemSize;i++)
     {
-        com::yamadalab::gitfarm::Item::SharedPtr citem = std::make_shared<com::yamadalab::gitfarm::Item>();
+        com::yamadalab::gitfarm::Item::SharedPtr cItem = std::make_shared<com::yamadalab::gitfarm::Item>();
 
-        const jobject &jitem = jenv->GetObjectArrayElement(jitems, i);
-        const jclass &jitem_class = jenv->GetObjectClass(jitem);
+        const jobject &jItem = jEnv->GetObjectArrayElement(jItems, i);
+        const jclass &jItemClass = jEnv->GetObjectClass(jItem);
 
-        const jfieldID &jitem_id_field = jenv->GetFieldID(jitem_class, "first", "Ljava/lang/Object;");
-        const jstring &jitem_id = (jstring) jenv->GetObjectField(jitem, jitem_id_field);
-        const char *citem_id = jenv->GetStringUTFChars(jitem_id, nullptr);
+        const jfieldID &jItemIdField = jEnv->GetFieldID(jItemClass, "first", JNI_OBJECT);
+        const jstring &jItemId = static_cast<jstring>(jEnv->GetObjectField(jItem, jItemIdField));
+        const char *cItemId = jEnv->GetStringUTFChars(jItemId, nullptr);
 
-        const jfieldID &jpair_second_id = jenv->GetFieldID(jitem_class, "second", "Ljava/lang/Object;");
-        const jobject &jpair_second_val = jenv->GetObjectField(jitem, jpair_second_id);
+        const jfieldID &jItemGradeField = jEnv->GetFieldID(jItemClass, "second", JNI_OBJECT);
+        const jstring &jItemGrade = static_cast<jstring>(jEnv->GetObjectField(jItem, jItemGradeField));
+        const char *cItemGrade = jEnv->GetStringUTFChars(jItemGrade, nullptr);
 
-        const jclass &jitem_info_pair_class = jenv->GetObjectClass(jpair_second_val);
+        cItem->set__id(std::string(cItemId));
+        cItem->set__grade(std::string(cItemGrade));
+        cItems.push_back(*cItem);
 
-        const jfieldID &jprobability_field = jenv->GetFieldID(jitem_info_pair_class, "first", "Ljava/lang/Object;");
-        const jobject &jprobability_object = jenv->GetObjectField(jpair_second_val, jprobability_field);
-        const jdouble &jprobability = JNI_parse_to_jdouble(jenv, jprobability_object);
-        const double &cprobability = static_cast<double>(jprobability);
-
-        const jfieldID &jfail_count_field = jenv->GetFieldID(jitem_info_pair_class, "second", "Ljava/lang/Object;");
-        const jobject &jfail_count_object = jenv->GetObjectField(jpair_second_val, jfail_count_field);
-        const jint &jfail_count = JNI_parse_to_jint(jenv, jfail_count_object);
-        const int &cfail_count = static_cast<int>(jfail_count);
-
-        citem->set__id(std::string(citem_id));
-        citem->set__probability(cprobability);
-        citem->set__fail_count(cfail_count);
-
-        citems.push_back(*citem);
-
-        jenv->ReleaseStringUTFChars(jitem_id, citem_id);
+        jEnv->ReleaseStringUTFChars(jItemId, cItemId);
+        jEnv->ReleaseStringUTFChars(jItemGrade, cItemGrade);
     }
 
-    algorithm_->set__items(citems);
+    algorithm_->set__items(cItems);
+
+    bool isItemUpdated = (algorithm_->get__items().size() > 0);
+    if (isItemUpdated)
+    {
+        fprintf(stdout, "%s, Item updated with size : %lu\n", LOG_JNI, algorithm_->get__items().size());
+    }
+    else
+    {
+        fprintf(stdout, "%s, Item update Failed", LOG_JNI);
+    }
+
+    return isItemUpdated;
+}
+
+JNIEXPORT jboolean JNICALL
+Java_com_yamadalab_gitfarm_middleware_algorithm_application_Random_nativeSetUser(JNIEnv *jEnv, jobject jObj, jobject jUser)
+{
+    jclass jUserClass = jEnv->GetObjectClass(jUser);
+
+    if (jUserClass == nullptr)
+    {
+        fprintf(stderr, "%s, Error getting user class\n", LOG_JNI);
+    }
+
+    jfieldID jUserNameField = jEnv->GetFieldID(jUserClass, "name", JNI_STRING);
+
+    if (jUserNameField == nullptr)
+    {
+        fprintf(stderr, "%s, Error getting user name field\n", LOG_JNI);
+    }
+
+    jfieldID jUserFailCountField = jEnv->GetFieldID(jUserClass, "failCount", JNI_INT);
+
+    if (jUserFailCountField == nullptr)
+    {
+        fprintf(stderr, "%s, Error getting user failCount field\n", LOG_JNI);
+    }
+
+    jstring jUserName = static_cast<jstring>(jEnv->GetObjectField(jUser, jUserNameField));
+    const char *cUserName = jEnv->GetStringUTFChars(jUserName, nullptr);
+
+    if (cUserName == nullptr || cUserName == "")
+    {
+        fprintf(stderr, "%s, Error getting user name\n", LOG_JNI);
+        return JNI_FALSE;
+    }
+
+    jint jUserFailCount = jEnv->GetIntField(jUser, jUserFailCountField);
+
+    com::yamadalab::gitfarm::User::SharedPtr user = std::make_shared<com::yamadalab::gitfarm::User>();
+    user->set__id(cUserName);
+    user->set__fail_count(jUserFailCount);
+
+    algorithm_->set__user(user);
+    fprintf(stdout, "%s, User Set succeeded with name : %s, failCount : %d \n", LOG_JNI, cUserName, jUserFailCount);
+
+    return JNI_TRUE;
 }
 
 JNIEXPORT jobject JNICALL
-Java_com_yamadalab_gitfarm_middleware_algorithm_Random_nativeDraw(JNIEnv *jenv, jobject jobj)
+Java_com_yamadalab_gitfarm_middleware_algorithm_application_Random_nativeDraw(JNIEnv *jEnv, jobject jObj)
 {
-    const std::vector<com::yamadalab::gitfarm::Item> &citems = algorithm_->get__items();
-    if (citems.empty())
+    const std::vector<com::yamadalab::gitfarm::Item> &cItems = algorithm_->get__items();
+    if (cItems.empty() || cItems.size() <= 0)
     {
-        printf("%s, WrsDraw, citems is empty");
-        return nullptr;
-    }
-    
-    std::vector<com::yamadalab::gitfarm::Item> cweighted_items;
-    for (const com::yamadalab::gitfarm::Item &citem : citems)
-    {
-        com::yamadalab::gitfarm::Item::SharedPtr cweighted_item = std::make_shared<com::yamadalab::gitfarm::Item>();
-
-        int cweight = 0;
-        const double &cprobability = citem.get__probability();
-        const double &cfail_count = citem.get__fail_count();
-
-        const bool &is_pity = algorithm_->pity_draw(cprobability, cfail_count);
-
-        if (is_pity == true)
-        {
-            cweight = PITY_WEIGHT;
-        }
-        else
-        {
-            cweight = 0;
-        }
-
-        cweighted_item->set__id(citem.get__id());
-        cweighted_item->set__weight(cweight);
-        cweighted_item->set__probability(cprobability);
-        cweighted_item->set__fail_count(cfail_count);
-        cweighted_items.push_back(*cweighted_item);
-    }
-
-    const com::yamadalab::gitfarm::Item &cdraw_item = algorithm_->wrs_draw(cweighted_items);
-
-    const jclass &jitem_class = jenv->FindClass("com/yamadalab/gitfarm/middleware/algorithm/Item");
-
-    if (jitem_class == nullptr)
-    {
-        printf("%s jItemClass is null", TAG);
+        printf("%s, WrsDraw, cItems is empty", LOG_JNI);
         return nullptr;
     }
 
-    jmethodID jitem_constructor = jenv->GetMethodID(jitem_class, "<init>", "(Ljava/lang/String;IDI)V");
-    if (jitem_constructor == nullptr)
+    const com::yamadalab::gitfarm::Item::SharedPtr &cDrawItem = algorithm_->draw();
+
+    const jclass &jItemClass = jEnv->FindClass(JITEM_PATH);
+
+    if (jItemClass == nullptr)
     {
-        printf("%s jItemConstructor is null", TAG);
+        printf("%s jItemClass is null", LOG_JNI);
         return nullptr;
     }
 
-    jstring jid = jenv->NewStringUTF(cdraw_item.get__id().c_str());
-    jint jweight = cdraw_item.get__weight();
-    jdouble jprobability = cdraw_item.get__probability();
-    jint jfail_count = cdraw_item.get__fail_count();
+    const jclass &jItemGradeClass = jEnv->FindClass(JITEM_GRADE_PATH);
 
-    jobject jitem = jenv->NewObject(jitem_class, jitem_constructor, jid, jweight, jprobability, jfail_count);
+    if (jItemGradeClass == nullptr)
+    {
+        printf("%s jItemGradeClass is null", LOG_JNI);
+        return nullptr;
+    }
 
-    jenv->DeleteLocalRef(jid);
+    const jmethodID &jItemConstructor = jEnv->GetMethodID(jItemClass, "<init>", JITEM_CONSTRUCTOR);
+    if (jItemConstructor == nullptr)
+    {
+        printf("%s jItemConstructor is null", LOG_JNI);
+        return nullptr;
+    }
 
-    return jitem;
+    const jstring &jItemId = jEnv->NewStringUTF(cDrawItem->get__id().c_str());
+    const jstring &jItemGrade = jEnv->NewStringUTF(cDrawItem->get__grade().c_str());
+
+    const jobject &jItem = jEnv->NewObject(jItemClass, jItemConstructor, jItemId, jItemGrade);
+
+    jEnv->DeleteLocalRef(jItemId);
+    jEnv->DeleteLocalRef(jItemGrade);
+
+    return jItem;
 }

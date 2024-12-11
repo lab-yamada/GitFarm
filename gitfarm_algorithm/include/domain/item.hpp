@@ -1,40 +1,45 @@
-#ifndef DOMAIN_ITEM__HPP
-#define DOMAIN_ITEM__HPP
+#ifndef GITFARM_DOMAIN_ITEM__HPP
+#define GITFARM_DOMAIN_ITEM__HPP
 
 #include <memory>
 #include <string>
 
-namespace com
+#define GRADE_S "S"
+#define GRADE_A "A"
+#define GRADE_B "B"
+#define GRADE_C "C"
+#define GRADE_D "D"
+
+#define WEIGHT_S 0.00000001
+#define WEIGHT_A 0.1
+#define WEIGHT_B 1
+#define WEIGHT_C 2
+#define WEIGHT_D 3
+
+namespace com::yamadalab::gitfarm
 {
-    namespace yamadalab
+    class Item final
     {
-        namespace gitfarm
-        {
-            class Item
-            {
-            private:
-                std::string id_;
-                int weight_;
-                double probability_;
-                int fail_count_;
+    private:
+        std::string id_;
+        std::string grade_;
+        double weight_;
 
-            public:
-                explicit Item();
-                virtual ~Item();
-                std::string get__id() const;
-                void set__id(const std::string &id);
-                int get__weight() const;
-                void set__weight(const int &weight);
-                double get__probability() const;
-                void set__probability(const double &probability);
-                int get__fail_count() const;
-                void set__fail_count(const int &fail_count);
+    public:
+        explicit Item();
+        virtual ~Item();
+        std::string get__id() const;
+        void set__id(const std::string &id);
+        std::string get__grade() const;
+        void set__grade(const std::string &grade);
+        double get__weight() const;
+        void set__weight(const double &weight);
 
-            public:
-                using SharedPtr = std::shared_ptr<Item>;
-            };
-        }
-    }
+    public:
+        using SharedPtr = std::shared_ptr<Item>;
+        using UniquePtr = std::unique_ptr<Item>;
+
+    };
 }
 
 #endif

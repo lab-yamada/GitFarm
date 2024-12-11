@@ -1,41 +1,68 @@
 
-import com.yamadalab.gitfarm.middleware.algorithm.Item;
-import com.yamadalab.gitfarm.middleware.algorithm.Random;
-import com.yamadalab.gitfarm.middleware.git.GitClient;
-import kotlinx.coroutines.runBlocking;
+import com.yamadalab.gitfarm.middleware.algorithm.application.Random
+import com.yamadalab.gitfarm.middleware.algorithm.domain.Grade
+import com.yamadalab.gitfarm.middleware.algorithm.domain.Item
+import com.yamadalab.gitfarm.middleware.algorithm.domain.User
+import com.yamadalab.gitfarm.middleware.git.application.GitClient
+import kotlinx.coroutines.runBlocking
 
 fun main() {
     val random: Random = Random();
 
     val items: Array<Item> = arrayOf(
-        Item("Item1", 0, 0.1, 0),
-        Item("Item2", 0, 1.1, 1),
-        Item("Item3", 0, 2.1, 2),
-        Item("Item4", 0, 3.1, 3),
-        Item("Item5", 0, 4.1, 4),
-        Item("Item6", 0, 5.1, 5),
-        Item("Item7", 0, 6.1, 6),
-        Item("Item8", 0, 7.1, 7),
-        Item("Item9", 0, 8.1, 8),
-        Item("Item10", 0, 9.1, 9),
-        Item("Item11", 0, 10.1, 10),
-        Item("Item12", 0, 11.1, 11),
-        Item("Item13", 0, 12.1, 12),
-        Item("Item14", 0, 13.1, 13),
-        Item("Item15", 0, 14.1, 14),
-        Item("Item16", 0, 15.1, 15),
-        Item("Item17", 0, 16.1, 16)
+        Item("Item1", Grade.S),
+        Item("Item2", Grade.S),
+        Item("Item3", Grade.A),
+        Item("Item4", Grade.A),
+        Item("Item5", Grade.A),
+        Item("Item6", Grade.B),
+        Item("Item7", Grade.B),
+        Item("Item8", Grade.B),
+        Item("Item9", Grade.B),
+        Item("Item10", Grade.C),
+        Item("Item11", Grade.C),
+        Item("Item12", Grade.C),
+        Item("Item13", Grade.C),
+        Item("Item14", Grade.D),
+        Item("Item15", Grade.D),
+        Item("Item16", Grade.D),
+        Item("Item17", Grade.D)
     );
 
-    for (i: Int in 1..30)
-    {
-        val drawResultId: String = random.draw(items);
-        println("DrawResultID : [$drawResultId]");
+    val isItemUpdated: Boolean = random.updateItems(items = items);
+
+    if (isItemUpdated) {
+        println("Item Updated");
+    } else {
+        println("Item Update Failed");
+    }
+
+    val user: User = User("reidlo5135", 100);
+    val isUserUpdated: Boolean = random.setUser(user = user);
+
+    if (isUserUpdated) {
+        println("User Set Succeeded");
+    } else {
+        println("User Set Failed");
     }
 
     val gitClient: GitClient = GitClient();
     runBlocking {
         val totalContributions: Int = gitClient.getTotalContributionsByYear("reidlo5135", "2024");
         println("totalContributions : $totalContributions");
+
+        for (i: Int in 1 .. totalContributions / 10) {
+            val drawItem: Item = random.draw();
+            println("DrawItem : [$drawItem][$i]");
+
+            if (drawItem.grade.toString() == Grade.S.toString()) {
+                user.failCount = 0;
+                random.setUser(user);
+                println("S Selected By User : $user");
+            } else {
+                user.failCount++;
+                random.setUser(user);
+            }
+        }
     }
 }
