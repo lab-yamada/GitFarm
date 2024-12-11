@@ -1,6 +1,10 @@
 .vscode
+.idea/**
+.idea/codeStyles/**
+*.xml
 .cmake
 build
 install
 log
 *.log
+cmake-build-debug/
