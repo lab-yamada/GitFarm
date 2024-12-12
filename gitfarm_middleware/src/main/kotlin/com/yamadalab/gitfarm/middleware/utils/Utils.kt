@@ -19,7 +19,7 @@ class Utils {
             println("cppLibFile : ${cppLibFile.absolutePath}");
             val url: URL? = Companion::class.java.getResource("/libs/$cppLibName");
             println("cpp url : $url");
-            System.load(url?.file);
+            System.load(url?.file?.split(":")?.get(1) ?: "");
         }
 
         fun loadGraphQL(fileName: String): String {
