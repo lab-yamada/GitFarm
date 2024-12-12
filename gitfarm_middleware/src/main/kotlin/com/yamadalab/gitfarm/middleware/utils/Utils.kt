@@ -6,6 +6,7 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule;
 import com.fasterxml.jackson.module.kotlin.readValue;
 import kotlinx.io.files.FileNotFoundException;
 import java.io.File;
+import java.net.URL
 
 class Utils {
 
@@ -16,7 +17,9 @@ class Utils {
             val cppLibName: String = System.mapLibraryName(fileName);
             val cppLibFile: File = File("$RESOURCE_PATH/libs/$cppLibName");
             println("cppLibFile : ${cppLibFile.absolutePath}");
-            System.load(cppLibFile.absolutePath);
+            val url: URL? = Companion::class.java.getResource("/libs/$cppLibName");
+            println("cpp url : $url");
+            System.load(url?.file);
         }
 
         fun loadGraphQL(fileName: String): String {
