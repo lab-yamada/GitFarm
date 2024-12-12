@@ -180,7 +180,6 @@ namespace com::yamadalab::gitfarm
 			if (random_val < current_weight)
 			{
 				const Item::SharedPtr &result_item = std::make_shared<Item>(item);
-				fprintf(stdout, "Weight, ResultItem id : %s, grade : %s\n", result_item->get__id().c_str(), result_item->get__grade().c_str());
 				return result_item;
 			}
 		}

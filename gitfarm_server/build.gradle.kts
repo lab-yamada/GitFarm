@@ -20,6 +20,7 @@ repositories {
 }
 
 dependencies {
+    implementation(files("../gitfarm_middleware/build/libs/gitfarm_middleware-1.0-SNAPSHOT.jar"))
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.jetbrains.kotlin:kotlin-reflect")

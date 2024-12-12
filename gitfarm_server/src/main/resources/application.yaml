@@ -1,0 +1,19 @@
+logging:
+  level:
+    root: warn
+    com.yamadalab.gitfarm: debug
+  logback:
+    rollingpolicy:
+      max-file-size: 1KB
+      max-history: 1
+
+spring:
+  application:
+    name: gitfarm_server
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+    hiddenmethod:
+      filter:
+        enabled: true
