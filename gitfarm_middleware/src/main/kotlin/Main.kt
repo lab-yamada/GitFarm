@@ -51,18 +51,21 @@ fun main() {
         val totalContributions: Int = gitClient.getTotalContributionsByYear("reidlo5135", "2024");
         println("totalContributions : $totalContributions");
 
-        for (i: Int in 1 .. totalContributions / 10) {
+        var s: Int = 0;
+        for (i: Int in 1 .. totalContributions / 2) {
             val drawItem: Item = random.draw();
-            println("DrawItem : [$drawItem][$i]");
+            println("DrawItem : [$drawItem][$i][${user.failCount}]");
 
             if (drawItem.grade.toString() == Grade.S.toString()) {
                 user.failCount = 0;
                 random.setUser(user);
                 println("S Selected By User : $user");
+                s++;
             } else {
                 user.failCount++;
                 random.setUser(user);
             }
         }
+        println("!!!! S[$s] !!!!");
     }
 }

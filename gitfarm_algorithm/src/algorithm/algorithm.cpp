@@ -30,11 +30,11 @@ namespace com::yamadalab::gitfarm
 		this->user_ = user;
 	}
 
-	bool Algorithm::is_ready_to_draw()
+	bool Algorithm::is_ready_to_draw() const
 	{
 		bool is_items_set = false;
 
-		if (this->get__items().empty() || this->get__items().size() <= 0)
+		if (this->get__items().empty())
 		{
 			fprintf(stderr, "IsReadyToDraw, items is empty\n");
 			is_items_set = false;
@@ -52,7 +52,6 @@ namespace com::yamadalab::gitfarm
 		return is_items_set;
 	}
 
-
 	void Algorithm::weight_items_by_grade()
 	{
 		const bool &is_ready_to_draw = this->is_ready_to_draw();
@@ -65,7 +64,7 @@ namespace com::yamadalab::gitfarm
 		const std::vector<Item> &origin_items = this->get__items();
 		std::vector<Item> weighted_items;
 
-		const double &default_weight = 100 / origin_items.size();
+		const double &default_weight = static_cast<double>(100 / origin_items.size());
 
 		for (const Item &origin_item : origin_items)
 		{
@@ -128,14 +127,14 @@ namespace com::yamadalab::gitfarm
 
 			if (user_fail_count == PITY_MAX_WEIGHT)
 			{
-				// fprintf(stdout, "!!! MAX PITY !!!\n");
+				fprintf(stdout, "!!! MAX PITY !!!\n");
 				weighted_item->set__weight(PITY_MAX_WEIGHT * PITY_MAX_WEIGHT);
 				weighted_items.push_back(std::move(*weighted_item));
 				user->set__fail_count(0);
 				continue;
 			}
 
-			const bool &is_pity = this->pity_select(origin_weight, user_fail_count);
+			const bool &is_pity = this->pity_select(static_cast<int>(origin_weight), user_fail_count);
 
 			if (is_pity)
 			{
@@ -150,7 +149,7 @@ namespace com::yamadalab::gitfarm
 		this->set__items(weighted_items);
 	}
 
-	Item::SharedPtr Algorithm::weight_random_select()
+	Item::SharedPtr Algorithm::weight_random_select() const
 	{
 		const bool &is_ready_to_draw = this->is_ready_to_draw();
 		if (!is_ready_to_draw)
@@ -171,7 +170,7 @@ namespace com::yamadalab::gitfarm
 		std::random_device rd;
 		std::mt19937 gen(rd());
 		std::uniform_real_distribution<> dist(0, total_weight - 1);
-		const int &random_val = dist(gen);
+		const double &random_val = dist(gen);
 
 		double current_weight = 0.0;
 		for (const Item& item : items)
@@ -181,6 +180,7 @@ namespace com::yamadalab::gitfarm
 			if (random_val < current_weight)
 			{
 				const Item::SharedPtr &result_item = std::make_shared<Item>(item);
+				fprintf(stdout, "Weight, ResultItem id : %s, grade : %s\n", result_item->get__id().c_str(), result_item->get__grade().c_str());
 				return result_item;
 			}
 		}
@@ -212,5 +212,4 @@ namespace com::yamadalab::gitfarm
 
 		return draw_item;
 	}
-
 }

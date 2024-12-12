@@ -87,7 +87,6 @@ Java_com_yamadalab_gitfarm_middleware_algorithm_application_Random_nativeSetUser
     user->set__fail_count(jUserFailCount);
 
     algorithm_->set__user(user);
-    fprintf(stdout, "%s, User Set succeeded with name : %s, failCount : %d \n", LOG_JNI, cUserName, jUserFailCount);
 
     return JNI_TRUE;
 }
@@ -96,7 +95,7 @@ JNIEXPORT jobject JNICALL
 Java_com_yamadalab_gitfarm_middleware_algorithm_application_Random_nativeDraw(JNIEnv *jEnv, jobject jObj)
 {
     const std::vector<com::yamadalab::gitfarm::Item> &cItems = algorithm_->get__items();
-    if (cItems.empty() || cItems.size() <= 0)
+    if (cItems.empty())
     {
         printf("%s, WrsDraw, cItems is empty", LOG_JNI);
         return nullptr;
