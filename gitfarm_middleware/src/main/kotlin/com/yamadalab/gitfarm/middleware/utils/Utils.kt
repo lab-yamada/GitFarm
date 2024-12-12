@@ -23,13 +23,20 @@ class Utils {
             val pwd: String = getPwd();
             println("Pwd : ${getPwd()}");
 
+            var projectName: String = "";
             var projectPath: String = "";
             var resourcePath: String = "";
             if (!pwd.contains(MIDDLEWARE_NAME)) {
+                projectName = SERVER_NAME;
                 projectPath = pwd.replace(SERVER_NAME, MIDDLEWARE_NAME);
                 resourcePath = "$projectPath/$RESOURCE_PATH";
             } else {
+                projectName = MIDDLEWARE_NAME;
                 resourcePath = RESOURCE_PATH;
+            }
+
+            if (projectPath.contains("$projectName/build/libs")) {
+                projectPath = projectPath.replace("$projectName/build/libs", "");
             }
 
             println("ProjectPath : $projectPath");
