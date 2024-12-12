@@ -24,18 +24,18 @@ namespace com::yamadalab::gitfarm
     private:
         std::vector<Item> items_;
         User::SharedPtr user_ = nullptr;
-        bool is_ready_to_draw();
+        [[nodiscard]] bool is_ready_to_draw() const;
         void weight_items_by_grade();
         void weight_items_by_pity();
-        Item::SharedPtr weight_random_select();
+        [[nodiscard]] Item::SharedPtr weight_random_select() const;
         static bool pity_select(const int &weight, const int &fail_count);
 
     public:
         explicit Algorithm();
         virtual ~Algorithm();
-        std::vector<Item> get__items() const;
+        [[nodiscard]] std::vector<Item> get__items() const;
         void set__items(const std::vector<Item> &items);
-        User::SharedPtr get__user() const;
+        [[nodiscard]] User::SharedPtr get__user() const;
         void set__user(const User::SharedPtr &user);
         Item::SharedPtr draw();
 
