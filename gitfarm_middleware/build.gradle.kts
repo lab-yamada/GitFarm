@@ -11,7 +11,6 @@ repositories {
 }
 
 val ktor_version: String by project;
-val logback_version: String by project
 
 dependencies {
     implementation(kotlin("stdlib"))

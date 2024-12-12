@@ -26,6 +26,7 @@ class Utils {
             var projectName: String = "";
             var projectPath: String = "";
             var resourcePath: String = "";
+
             if (!pwd.contains(MIDDLEWARE_NAME)) {
                 projectName = SERVER_NAME;
                 projectPath = pwd.replace(SERVER_NAME, MIDDLEWARE_NAME);

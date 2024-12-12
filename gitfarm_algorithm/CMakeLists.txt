@@ -52,6 +52,7 @@ set(SOURCES
     src/domain/item.cpp
     src/domain/user.cpp
     src/jni/jni.c
+        src/logger/logger.cpp
 )
 
 set(LIB_NAME
